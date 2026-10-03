@@ -16,8 +16,11 @@ Gates
 5. issue: the PR closes a GitHub issue. GitHub's closingIssuesReferences count wins when
    present (it includes issues linked from the PR sidebar and only counts issues that
    exist); otherwise the body needs a closing keyword such as ``Closes #12``. ``Refs #12``
-   does not link. Bot authors (``*[bot]``) are exempt. No label bypasses it; see
-   .claude/rules/pr-issue-link.md.
+   does not link. No label bypasses it; see .claude/rules/pr-issue-link.md.
+
+Bot authors (``*[bot]``, e.g. Dependabot) are exempt from gates 1, 2, 4 and 5: they cannot
+write OpenSpec changes, CHANGELOG lines or issues, and their titles come from dependabot.yml.
+The version gate still applies to them.
 """
 
 from __future__ import annotations
@@ -67,9 +70,13 @@ def version_at(ref: str) -> str | None:
     return match.group(1) if match else None
 
 
+def is_bot(author: str) -> bool:
+    return author.endswith("[bot]")
+
+
 def issue_link_error(body: str, author: str, linked: str) -> str | None:
     """Gate 5: the failure message, or None when the PR closes an issue or is exempt."""
-    if author.endswith("[bot]"):
+    if is_bot(author):
         return None
     if linked.strip():
         if int(linked) > 0:
@@ -93,6 +100,9 @@ def main() -> int:
         label.strip() for label in os.environ.get("PR_LABELS", "").split(",") if label.strip()
     }
 
+    author = os.environ.get("PR_AUTHOR", "")
+    bot = is_bot(author)
+
     files = changed_files(base, head)
     errors: list[str] = []
 
@@ -101,14 +111,14 @@ def main() -> int:
     touches_src = any(f.startswith("src/") for f in files)
     touches_changelog = "CHANGELOG.md" in files
 
-    if touches_major and not touches_spec and "skip-openspec" not in labels:
+    if touches_major and not touches_spec and "skip-openspec" not in labels and not bot:
         errors.append(
             "openspec gate: this PR changes src/, .github/, .claude/, Dockerfile or pyproject.toml "
             "but adds no openspec/changes/<name>/ folder. Run `openspec new change <slug>` "
             "(or /opsx:propose) and commit it, or add the `skip-openspec` label with a reason."
         )
 
-    if touches_src and not touches_changelog and "skip-changelog" not in labels:
+    if touches_src and not touches_changelog and "skip-changelog" not in labels and not bot:
         errors.append(
             "changelog gate: src/ changed but CHANGELOG.md did not. Add a line under "
             "## [Unreleased] or add the `skip-changelog` label with a reason."
@@ -125,7 +135,7 @@ def main() -> int:
         if not re.match(r"^\d+\.\d+\.\d+(?:(?:a|b|rc)\d+)?(?:\.dev\d+)?$", new_version):
             errors.append(f"version gate: {new_version} is not SemVer (see check_release.py).")
 
-    if not TITLE_RE.match(title):
+    if not bot and not TITLE_RE.match(title):
         errors.append(
             f"title gate: '{title}' is not Conventional Commits. Use `type(scope): summary` with "
             "type in feat|fix|docs|chore|refactor|test|ci|build|perf|spec|release."
@@ -133,7 +143,7 @@ def main() -> int:
 
     issue_error = issue_link_error(
         os.environ.get("PR_BODY", ""),
-        os.environ.get("PR_AUTHOR", ""),
+        author,
         os.environ.get("LINKED_ISSUES", ""),
     )
     if issue_error:
