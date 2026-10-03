@@ -9,6 +9,8 @@ PyPI publishes that version (see `docs/RELEASING.md`).
 
 ### Changed
 
+- PR gates exempt bot authors (Dependabot) from the OpenSpec, CHANGELOG, title and issue gates; the version gate still applies. Dependabot commits now use `build(deps)` / `ci(deps)` prefixes. The Claude review and conformance jobs skip bot PRs and, when `ANTHROPIC_API_KEY` is unset, warn and pass instead of failing (#10).
+
 - Every pull request closes a GitHub issue. PR gate 5 checks GitHub's `closingIssuesReferences`, and a `pr-issue-link` hook stops Claude Code and Codex from opening an unlinked PR. Planning PRs close a `Plan:` sub-issue (#7).
 
 ## [0.1.0] - 2026-09-16
