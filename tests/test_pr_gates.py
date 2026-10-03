@@ -171,3 +171,26 @@ def test_issue_gate_exempts_bots_and_ignores_labels(repo: Path) -> None:
         repo, base, head, title="docs: x", body="", labels="skip-openspec,skip-changelog"
     )
     assert labelled[0] == 1 and "issue gate" in labelled[1]
+
+
+def test_bots_are_exempt_from_openspec_changelog_and_title_gates(repo: Path) -> None:
+    base = git(repo, "rev-parse", "HEAD")
+    (repo / "pyproject.toml").write_text('[project]\nname = "x"\n')
+    (repo / "src" / "project_template" / "x.py").write_text("x = 1\n")
+    head = commit(repo)
+    title = "deps: bump typer from 0.12 to 0.15"
+    bot = run(repo, base, head, title=title, body="", author="dependabot[bot]", linked="0")
+    assert bot[0] == 0, bot[1]
+    human = run(repo, base, head, title=title, body="Closes #1", author="someone")
+    assert human[0] == 1
+    for gate in ("openspec gate", "changelog gate", "title gate"):
+        assert gate in human[1]
+
+
+def test_bots_still_hit_the_version_gate(repo: Path) -> None:
+    base = git(repo, "rev-parse", "HEAD")
+    (repo / "src" / "project_template" / "__about__.py").write_text('__version__ = "0.2.0"\n')
+    head = commit(repo)
+    code, out = run(repo, base, head, title="x", body="", author="dependabot[bot]", linked="0")
+    assert code == 1
+    assert "version gate" in out
