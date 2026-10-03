@@ -1,0 +1,44 @@
+name: Deploy reviewed API image to Cloud Run
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Approved Artifact Registry image with sha256 digest
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: cloud-run-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: vars.CLOUD_DEPLOY_ENABLED == 'true' && github.ref_name == github.event.repository.default_branch
+    environment: production
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v3
+      - name: Deploy private service with external state
+        env:
+          IMAGE: ${{ inputs.image }}
+          PROJECT: ${{ vars.GCP_PROJECT_ID }}
+          SERVICE: ${{ vars.CLOUD_RUN_SERVICE }}
+          RUNTIME_SA: ${{ vars.GCP_RUNTIME_SERVICE_ACCOUNT }}
+          DATABASE_SECRET: ${{ vars.GCP_DATABASE_SECRET_VERSION }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$IMAGE" =~ ^us-central1-docker.pkg.dev/[a-zA-Z0-9/_-]+@sha256:[a-f0-9]{64}$ ]]
+          [[ -n "$PROJECT" && -n "$SERVICE" && -n "$RUNTIME_SA" && -n "$DATABASE_SECRET" ]]
+          gcloud run deploy "$SERVICE" --project "$PROJECT" --region us-central1 \
+            --image "$IMAGE" --service-account "$RUNTIME_SA" \
+            --min-instances 0 --max-instances 3 --cpu 1 --memory 512Mi \
+            --concurrency 40 --timeout 60 --cpu-throttling --no-allow-unauthenticated \
+            --set-secrets "DATABASE_URL=$DATABASE_SECRET" --quiet

@@ -1,0 +1,61 @@
+name: PR gates
+
+# Policy checks that are about the change, not the code:
+#   1. Major changes need an OpenSpec change folder in the same PR.
+#   2. Code changes need a CHANGELOG entry under [Unreleased] or the new version.
+#   3. A version bump needs a matching CHANGELOG section.
+#   4. PR title follows Conventional Commits (feeds release notes and history).
+#   5. The PR closes a GitHub issue (GitHub's closingIssuesReferences). No label bypasses it.
+# Labels `skip-openspec` / `skip-changelog` bypass 1 and 2 with a reason in the PR.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+concurrency:
+  group: pr-gates-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    name: OpenSpec, CHANGELOG, version, title, issue
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Count the issues this PR closes
+        id: links
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # The $-names in the query are GraphQL variables, not shell ones.
+          # shellcheck disable=SC2016
+          count=$(gh api graphql \
+            -F owner="${GITHUB_REPOSITORY%/*}" -F name="${GITHUB_REPOSITORY#*/}" -F pr="$PR_NUMBER" \
+            -f query='query($owner: String!, $name: String!, $pr: Int!) {
+              repository(owner: $owner, name: $name) {
+                pullRequest(number: $pr) { closingIssuesReferences(first: 1) { totalCount } }
+              }
+            }' \
+            --jq '.data.repository.pullRequest.closingIssuesReferences.totalCount') || count=""
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+      - name: Run gates
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          LINKED_ISSUES: ${{ steps.links.outputs.count }}
+        run: python .github/scripts/check_pr_gates.py

@@ -1,0 +1,31 @@
+name: Enterprise hosting inquiry
+description: Ask the maintainer about managed or customer-hosted deployment.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue is visible to repository readers and may become public if the repo is published.
+        Do not include secrets, private customer data, or confidential architecture.
+        An inquiry does not create a hosting commitment or SLA. The maintainer can arrange a private channel if needed.
+  - type: textarea
+    id: use_case
+    attributes:
+      label: What would you like to accomplish?
+      description: A non-sensitive description of the app and team workflow.
+    validations:
+      required: true
+  - type: dropdown
+    id: hosting
+    attributes:
+      label: Deployment interest
+      options:
+        - Managed hosting
+        - Customer-hosted containers
+        - Exploring options
+    validations:
+      required: true
+  - type: textarea
+    id: scale
+    attributes:
+      label: Approximate scale and questions
+      description: Approximate users, traffic, timeline and questions; omit confidential details.

@@ -1,0 +1,6 @@
+# Local run of the image. `docker compose run --rm app hello JJ`
+services:
+  app:
+    build: .
+    image: espin086/project-template:local
+    command: ["--help"]

@@ -1,0 +1,31 @@
+name: Template sync
+
+# Downstream repos created from this template run this weekly to pull template
+# improvements (workflows, .claude harness, gates) as a PR. In the template
+# repo itself it does nothing. Disable per-file with .templatesyncignore.
+
+on:
+  schedule:
+    - cron: "23 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    if: github.repository != 'espin086/template-python-cli'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ github.token }}
+      - uses: AndreasAugustin/actions-template-sync@v2
+        with:
+          source_repo_path: espin086/template-python-cli
+          upstream_branch: main
+          pr_title: "chore(template): sync with project-template"
+          pr_labels: "skip-openspec,skip-changelog,template-sync"
+          pr_commit_msg: "chore(template): sync with project-template"
+          is_pr_cleanup: true

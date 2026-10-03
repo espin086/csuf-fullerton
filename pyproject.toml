@@ -1,0 +1,94 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "project-template"
+dynamic = ["version"]
+description = "Project template: Python CLI + library, Docker image, PyPI release, OpenSpec-gated changes, Claude and Codex harness."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Project Authors" }]
+keywords = ["template", "cli"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+
+dependencies = [
+  "typer>=0.12",
+  "rich>=13.7",
+  "pydantic>=2.7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2",
+  "pytest-cov>=5.0",
+  "ruff>=0.5",
+  "mypy>=1.10",
+  "pip-audit>=2.7",
+  "pre-commit>=3.7",
+]
+
+[project.scripts]
+project-template = "project_template.cli.main:app"
+
+[project.urls]
+Homepage = "https://github.com/espin086/template-python-cli"
+Issues = "https://github.com/espin086/template-python-cli/issues"
+Changelog = "https://github.com/espin086/template-python-cli/blob/main/CHANGELOG.md"
+Source = "https://github.com/espin086/template-python-cli"
+
+[tool.hatch.version]
+path = "src/project_template/__about__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/project_template"]
+
+[tool.hatch.build.targets.sdist]
+# Project context is design history, not distributable code.
+exclude = ["context-lake", ".claude", ".agents", ".codex", "site", "templates", "openspec", ".github", "docs", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+markers = [
+  "network: test requires live network access (deselect with '-m \"not network\"')",
+]
+
+[tool.coverage.run]
+source = ["project_template"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+exclude_also = [
+  "if TYPE_CHECKING:",
+  "if __name__ == .__main__.:",
+  "raise NotImplementedError",
+  "\\.\\.\\.",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF", "S"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S603", "S607"]
+".github/scripts/**" = ["S310"]
+
+[tool.mypy]
+python_version = "3.11"
+packages = ["project_template"]
+strict = true
+warn_unreachable = true

@@ -1,0 +1,15 @@
+spec:
+  - changed-files:
+      - any-glob-to-any-file: "openspec/**"
+harness:
+  - changed-files:
+      - any-glob-to-any-file: [".claude/**", "CLAUDE.md"]
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ".github/**"
+docker:
+  - changed-files:
+      - any-glob-to-any-file: ["Dockerfile", "compose.yaml", ".dockerignore"]
+release:
+  - changed-files:
+      - any-glob-to-any-file: ["src/project_template/__about__.py", "CHANGELOG.md"]

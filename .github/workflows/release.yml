@@ -1,0 +1,213 @@
+name: Release
+
+# Releases are version-gated pushes to main. Bump src/<pkg>/__about__.py, add a
+# CHANGELOG entry, merge the PR. If that version is not yet on PyPI this
+# workflow re-runs CI, builds, publishes to PyPI (Trusted Publishing), pushes the
+# Docker image to Docker Hub and GHCR, and creates the GitHub release + tag.
+# One-time setup is in docs/RELEASING.md.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Where to publish"
+        type: choice
+        options: [testpypi, pypi]
+        default: testpypi
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  IMAGE_NAME: espin086/project-template
+
+jobs:
+  decide:
+    name: Should we publish?
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.check.outputs.version }}
+      publish: ${{ steps.check.outputs.publish }}
+      target: ${{ steps.check.outputs.target }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - id: check
+        name: Compare the declared version against the index
+        env:
+          TARGET: ${{ inputs.target || 'pypi' }}
+          RELEASE_ENABLED: ${{ vars.RELEASE_ENABLED }}
+        run: python .github/scripts/check_release.py >> "$GITHUB_OUTPUT"
+      - name: Summary
+        run: |
+          {
+            echo "### Release decision"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Version | \`${{ steps.check.outputs.version }}\` |"
+            echo "| Target | \`${{ steps.check.outputs.target }}\` |"
+            echo "| Publish | \`${{ steps.check.outputs.publish }}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  verify:
+    name: Verify
+    needs: decide
+    if: needs.decide.outputs.publish == 'true'
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  build:
+    name: Build distributions
+    needs: [decide, verify]
+    if: needs.decide.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install build twine
+      - run: python -m build
+      - run: twine check --strict dist/*
+      - name: Assert the built version matches the decision
+        env:
+          EXPECTED: ${{ needs.decide.outputs.version }}
+        run: |
+          ls -1 dist/
+          test -f "dist/project_template-${EXPECTED}-py3-none-any.whl" \
+            || { echo "::error::No wheel for expected version ${EXPECTED}"; exit 1; }
+          test -f "dist/project_template-${EXPECTED}.tar.gz" \
+            || { echo "::error::No sdist for expected version ${EXPECTED}"; exit 1; }
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-dist
+          path: dist/
+          if-no-files-found: error
+
+  publish-pypi:
+    name: Publish to ${{ needs.decide.outputs.target }}
+    needs: [decide, build]
+    if: needs.decide.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    # The environment is the human control point. Add required reviewers to it
+    # in repo settings to turn every publish into an approval gate.
+    environment:
+      name: ${{ needs.decide.outputs.target }}
+      url: ${{ needs.decide.outputs.target == 'pypi' && format('https://pypi.org/project/project-template/{0}/', needs.decide.outputs.version) || format('https://test.pypi.org/project/project-template/{0}/', needs.decide.outputs.version) }}
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: ${{ needs.decide.outputs.target == 'testpypi' && 'https://test.pypi.org/legacy/' || '' }}
+          print-hash: true
+          attestations: true
+
+  publish-image:
+    name: Push Docker image
+    needs: [decide, verify]
+    if: needs.decide.outputs.publish == 'true' && needs.decide.outputs.target == 'pypi'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.IMAGE_NAME }}
+            ghcr.io/${{ github.repository }}
+          tags: |
+            type=semver,pattern={{version}},value=v${{ needs.decide.outputs.version }}
+            type=semver,pattern={{major}}.{{minor}},value=v${{ needs.decide.outputs.version }}
+            type=raw,value=latest
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: true
+          sbom: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  github-release:
+    name: Tag and create GitHub release
+    needs: [decide, publish-pypi, publish-image]
+    if: needs.decide.outputs.publish == 'true' && needs.decide.outputs.target == 'pypi'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-dist
+          path: dist/
+      - name: Extract this version's CHANGELOG section
+        env:
+          VERSION: ${{ needs.decide.outputs.version }}
+        run: python .github/scripts/changelog_section.py "$VERSION" > release-notes.md
+      - name: Create tag and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.decide.outputs.version }}
+        run: |
+          if gh release view "v${VERSION}" >/dev/null 2>&1; then
+            echo "Release v${VERSION} already exists."
+            exit 0
+          fi
+          gh release create "v${VERSION}" dist/* \
+            --title "v${VERSION}" \
+            --notes-file release-notes.md \
+            --verify-tag=false
+
+  report:
+    name: Report
+    needs: decide
+    if: needs.decide.result == 'success' && needs.decide.outputs.publish != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: No release for this push
+        run: |
+          {
+            echo "### No release"
+            echo ""
+            echo "Version \`${{ needs.decide.outputs.version }}\` already exists on the index (or RELEASE_ENABLED is not true)."
+            echo "Bump \`src/project_template/__about__.py\` and add a \`CHANGELOG.md\` entry to publish."
+          } >> "$GITHUB_STEP_SUMMARY"

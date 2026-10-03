@@ -1,0 +1,4 @@
+# Runtime configuration only; shared instructions are in AGENTS.md.
+# Project config is loaded subject to the user's Codex trust settings.
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"

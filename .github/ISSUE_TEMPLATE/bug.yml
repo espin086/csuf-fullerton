@@ -1,0 +1,40 @@
+name: Bug
+description: Something behaves differently from its spec
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `project-template --version`
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact command and input. Paste the output.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: Which spec scenario (openspec/specs/...) says so?
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: What observable behavior would demonstrate that this is solved?
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: A maintainer will triage this issue. The OpenSpec planning PR must merge before implementation starts.
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include redacted output and relevant environment details.
+    validations:
+      required: true

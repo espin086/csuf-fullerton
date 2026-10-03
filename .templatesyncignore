@@ -1,0 +1,11 @@
+# Files a downstream repo owns outright; the template-sync PR never touches them.
+README.md
+CHANGELOG.md
+LICENSE
+pyproject.toml
+src/
+tests/
+openspec/changes/
+openspec/specs/
+openspec/project.md
+context-lake/
