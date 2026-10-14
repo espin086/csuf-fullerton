@@ -333,5 +333,8 @@ def svar(
     console.print(f"Report: {out / 'svar.md'}")
 
 
+# Change 0005 commands register themselves on ``app``; imported last to avoid a cycle.
+from csuf_fullerton.cli import tvcmds  # noqa: E402, F401
+
 if __name__ == "__main__":
     app()

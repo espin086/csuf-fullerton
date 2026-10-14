@@ -43,14 +43,44 @@ def select_series(
     return out
 
 
-def fetch_series(
+def fetch_rows(
     dataflow: str, filters: Mapping[str, str], agency: str = "IMF.STA"
-) -> dict[str, float]:
+) -> list[dict[str, str]]:
+    """All rows of a dataflow for the COUNTRY and FREQUENCY in ``filters``."""
     query = {f"c[{k}]": v for k, v in filters.items() if k in ("COUNTRY", "FREQUENCY")}
     url = f"{BASE}/{agency}/{dataflow}/+/*?{urllib.parse.urlencode(query)}"
     headers = {"Accept": ACCEPT, "User-Agent": "csuf-fullerton"}
     req = urllib.request.Request(url, headers=headers)  # noqa: S310
     with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:  # noqa: S310
         text = resp.read().decode()
-    rows = list(csv.DictReader(io.StringIO(text)))
-    return select_series(rows, filters, f"{agency}/{dataflow}")
+    return list(csv.DictReader(io.StringIO(text)))
+
+
+def fetch_series(
+    dataflow: str, filters: Mapping[str, str], agency: str = "IMF.STA"
+) -> dict[str, float]:
+    return select_series(fetch_rows(dataflow, filters, agency), filters, f"{agency}/{dataflow}")
+
+
+TRADE_FLOWS = ("XG_FOB_USD", "MG_CIF_USD")  # goods exports FOB and imports CIF, U.S. dollars
+
+
+def trade_table(
+    rows: list[dict[str, str]], partners: Mapping[str, str], world: str = "G001"
+) -> dict[tuple[str, int], float]:
+    """Annual exports plus imports by partner name from IMTS rows; ``world`` keys the total.
+
+    ``partners`` maps a short name (``us``) to an IMF counterpart code (``USA``). A year is
+    kept only when both flows are present for that counterpart.
+    """
+    codes = {**{v: k for k, v in partners.items()}, world: "world"}
+    flows: dict[tuple[str, int], dict[str, float]] = {}
+    for r in rows:
+        if r.get("INDICATOR") not in TRADE_FLOWS or not r.get("OBS_VALUE"):
+            continue
+        name = codes.get(r.get("COUNTERPART_COUNTRY", ""))
+        if name is None:
+            continue
+        key = (name, int(r["TIME_PERIOD"][:4]))
+        flows.setdefault(key, {})[r["INDICATOR"]] = float(r["OBS_VALUE"])
+    return {k: sum(v.values()) for k, v in flows.items() if len(v) == len(TRADE_FLOWS)}
