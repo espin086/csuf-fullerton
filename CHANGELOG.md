@@ -13,7 +13,7 @@ PyPI publishes that version (see `docs/RELEASING.md`).
 - `screen` command: grades every theory-admissible foreign/domestic split on theory and on statistics separately (unit roots, Johansen rank, bootstrap Toda-Yamamoto block Wald with Holm correction, weak exogeneity, instantaneous causality, Clark-West, DirectLiNGAM ordering), ranks them, and checks headline impulse responses for robustness (#2, change 0004).
 - `fetch` command: FRED and IMF SDMX series from a TOML recipe into one aligned CSV with a sources sidecar (change 0004).
 - `init` command: stores a FRED API key in the OS keychain or a `0600` file; `FRED_API_KEY` takes precedence (change 0004).
-- Nicaragua example (`examples/nicaragua/`) and report (`reports/nicaragua/report.md`).
+- Nicaragua example (`examples/nicaragua/`) and report (`reports/nicaragua/report.md`, Word version, estimation-sample and candidate CSVs).
 
 ### Changed
 
