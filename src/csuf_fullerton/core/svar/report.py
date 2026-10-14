@@ -177,14 +177,14 @@ def screen_markdown(r: ScreenResult, figures: Mapping[str, str] | None = None) -
         "## Stage 4 and 5. Candidate specifications",
         "",
         "LA-Wald is the primary test (domestic lags excluded from foreign equations, robust to "
-        "unit roots); its p-value is bootstrapped under the null (Hacker and Hatemi-J 2006) "
-        "because the asymptotic version over-rejects in samples this size. Holm p adjusts the "
-        "bootstrap p across every admissible candidate. LR is the Sims-"
-        "corrected likelihood ratio of change 0002. Inst. p tests residual correlation between "
-        "blocks (rejection is expected and is what the recursive impact matrix orders). CW is "
-        "the Clark-West out-of-sample test that domestic lags improve foreign forecasts. LiNGAM "
-        "agree is the share of foreign-domestic pairs the data-driven causal order puts foreign "
-        "first, with the bootstrap 5th percentile.",
+        + "unit roots); its p-value is bootstrapped under the null (Hacker and Hatemi-J 2006) "
+        + "because the asymptotic version over-rejects in samples this size. Holm p adjusts the "
+        + "bootstrap p across every admissible candidate. LR is the Sims-"
+        + "corrected likelihood ratio of change 0002. Inst. p tests residual correlation between "
+        + "blocks (rejection is expected and is what the recursive impact matrix orders). CW is "
+        + "the Clark-West out-of-sample test that domestic lags improve foreign forecasts. LiNGAM "
+        + "agree is the share of foreign-domestic pairs the data-driven causal order puts foreign "
+        + "first, with the bootstrap 5th percentile.",
         "",
         _table(CANDIDATE_HEADER, candidate_rows(sorted(r.candidates, key=lambda c: c.rank or 999))),
         "",
