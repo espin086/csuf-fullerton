@@ -74,7 +74,7 @@ def test_armed_first_release_publishes(
 def test_armed_existing_version_publishes_nothing(
     monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    from project_template import __version__
+    from csuf_fullerton import __version__
 
     outputs, err = run(
         monkeypatch, capsys, target="pypi", enabled="true", index=lambda *_: {__version__}

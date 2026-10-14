@@ -12,4 +12,4 @@ docker:
       - any-glob-to-any-file: ["Dockerfile", "compose.yaml", ".dockerignore"]
 release:
   - changed-files:
-      - any-glob-to-any-file: ["src/project_template/__about__.py", "CHANGELOG.md"]
+      - any-glob-to-any-file: ["src/csuf_fullerton/__about__.py", "CHANGELOG.md"]

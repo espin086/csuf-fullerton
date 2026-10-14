@@ -1,6 +1,6 @@
-# project-template
+# csuf-fullerton
 
-Python CLI + library. Pure logic in `src/project_template/core/`, thin adapters in `cli/`.
+Python CLI + library. Pure logic in `src/csuf_fullerton/core/`, thin adapters in `cli/`.
 Spec-driven: no major change without an OpenSpec change folder.
 
 ## Read order (progressive disclosure)
@@ -28,7 +28,7 @@ openspec new change <slug>   # start a change (or /propose)
 - Every scenario in a spec delta has a test that names it. Math and logic tested against known
   answers, never live data (`@pytest.mark.network` for the rest).
 - `CHANGELOG.md` `[Unreleased]` gets a line for every user-visible change.
-- Release = bump `src/project_template/__about__.py` + CHANGELOG section + merge. Nothing manual.
+- Release = bump `src/csuf_fullerton/__about__.py` + CHANGELOG section + merge. Nothing manual.
 - Secrets never enter the repo or a prompt. Agent-specific settings are not universal controls.
 - Every PR closes a GitHub issue: `Closes #<n>` in the body, fixes and releases included.
   No issue yet? Create it first (`gh issue create`). A planning PR closes its `Plan:`

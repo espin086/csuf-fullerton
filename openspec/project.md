@@ -1,4 +1,4 @@
-# project-template
+# csuf-fullerton
 
 ## What this is
 
@@ -11,7 +11,7 @@ A template for a Python CLI/library repo. Made from `Use this template` on GitHu
 |---|---|
 | Specs and changes for this repo | `openspec/` |
 | Agent harness (hooks, agents, skills, rules) | `AGENTS.md`, linked `.agents/` skills/rules, Claude-specific runtime in `.claude/` |
-| Package | `src/project_template/` (`core/` pure, `cli/` adapter) |
+| Package | `src/csuf_fullerton/` (`core/` pure, `cli/` adapter) |
 | Gates | `.github/workflows/{ci,pr-gates,claude-review,codeql}.yml` |
 | Release | `.github/workflows/release.yml`, `docs/RELEASING.md` |
 

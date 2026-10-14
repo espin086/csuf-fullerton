@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-SRC = Path(__file__).resolve().parents[2] / "src" / "project_template"
+SRC = Path(__file__).resolve().parents[2] / "src" / "csuf_fullerton"
 CORE = SRC / "core"
 
 FORBIDDEN_IN_CORE = {
@@ -28,7 +28,7 @@ FORBIDDEN_IN_CORE = {
     "httpx",
     "typer",
     "rich",
-    "project_template.cli",
+    "csuf_fullerton.cli",
 }
 
 
@@ -57,4 +57,4 @@ def test_cli_does_not_define_business_logic() -> None:
     """Adapters may only call into core. A CLI module with no core import is
     a smell: it is probably computing something itself."""
     main = SRC / "cli" / "main.py"
-    assert any(n.startswith("project_template.core") for n in _imports(main))
+    assert any(n.startswith("csuf_fullerton.core") for n in _imports(main))

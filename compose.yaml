@@ -2,5 +2,5 @@
 services:
   app:
     build: .
-    image: espin086/project-template:local
+    image: espin086/csuf-fullerton:local
     command: ["--help"]

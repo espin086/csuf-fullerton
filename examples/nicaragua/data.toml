@@ -1,0 +1,61 @@
+# Nicaragua small-open-economy dataset, monthly.
+# U.S. and world block from FRED; Nicaragua from the IMF SDMX API (FRED carries only annual
+# Nicaraguan series). Logs are scaled by 100 so impulse responses read as percent.
+
+[meta]
+frequency = "M"
+start = "1994-01"
+end = "2014-06"   # IMF industrial production for Nicaragua ends 2014-06
+
+[[series]]
+name = "ffr"
+source = "fred"
+id = "FEDFUNDS"
+transform = "level"
+description = "Effective federal funds rate, percent"
+
+[[series]]
+name = "us_ip"
+source = "fred"
+id = "INDPRO"
+transform = "log100"
+description = "U.S. industrial production index, SA"
+
+[[series]]
+name = "commodity"
+source = "fred"
+id = "PALLFNFINDEXM"
+transform = "log100"
+description = "IMF global price index of all commodities (via FRED)"
+
+[[series]]
+name = "ni_ip"
+source = "imf"
+dataflow = "PI"
+filters = { COUNTRY = "NIC", FREQUENCY = "M", PRODUCTION_INDEX = "IND", TYPE_OF_TRANSFORMATION = "IX" }
+transform = "log100"
+description = "Nicaragua industrial production index, NSA (IMF PI)"
+
+[[series]]
+name = "ni_cpi"
+source = "imf"
+dataflow = "CPI"
+filters = { COUNTRY = "NIC", FREQUENCY = "M", INDEX_TYPE = "CPI", COICOP_1999 = "_T", TYPE_OF_TRANSFORMATION = "SRP_IX" }
+transform = "log100"
+description = "Nicaragua CPI, all items, spliced index, NSA (IMF CPI)"
+
+[[series]]
+name = "ni_m2"
+source = "imf"
+dataflow = "MFS_DC"
+filters = { COUNTRY = "NIC", FREQUENCY = "M", INDICATOR = "DCORP_L_BM", TYPE_OF_TRANSFORMATION = "SA_XDC" }
+transform = "log100"
+description = "Nicaragua broad money, depository corporations survey, SA (IMF MFS)"
+
+[[series]]
+name = "ni_er"
+source = "imf"
+dataflow = "ER"
+filters = { COUNTRY = "NIC", FREQUENCY = "M", INDICATOR = "XDC_USD", TYPE_OF_TRANSFORMATION = "PA_RT" }
+transform = "log100"
+description = "Cordobas per U.S. dollar, period average (IMF ER)"

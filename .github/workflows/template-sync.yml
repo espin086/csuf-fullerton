@@ -25,7 +25,7 @@ jobs:
         with:
           source_repo_path: espin086/template-python-cli
           upstream_branch: main
-          pr_title: "chore(template): sync with project-template"
+          pr_title: "chore(template): sync with csuf-fullerton"
           pr_labels: "skip-openspec,skip-changelog,template-sync"
-          pr_commit_msg: "chore(template): sync with project-template"
+          pr_commit_msg: "chore(template): sync with csuf-fullerton"
           is_pr_cleanup: true

@@ -1,0 +1,62 @@
+{
+  "retrieved": "2026-10-14T21:46:57+00:00",
+  "fred_access": "fredgraph",
+  "series": [
+    {
+      "name": "ffr",
+      "source": "fred",
+      "id": "FEDFUNDS",
+      "transform": "level",
+      "scale": 1.0,
+      "description": "Effective federal funds rate, percent"
+    },
+    {
+      "name": "us_ip",
+      "source": "fred",
+      "id": "INDPRO",
+      "transform": "log100",
+      "scale": 1.0,
+      "description": "U.S. industrial production index, SA"
+    },
+    {
+      "name": "commodity",
+      "source": "fred",
+      "id": "PALLFNFINDEXM",
+      "transform": "log100",
+      "scale": 1.0,
+      "description": "IMF global price index of all commodities (via FRED)"
+    },
+    {
+      "name": "ni_ip",
+      "source": "imf",
+      "id": "PI {'COUNTRY': 'NIC', 'FREQUENCY': 'M', 'PRODUCTION_INDEX': 'IND', 'TYPE_OF_TRANSFORMATION': 'IX'}",
+      "transform": "log100",
+      "scale": 1.0,
+      "description": "Nicaragua industrial production index, NSA (IMF PI)"
+    },
+    {
+      "name": "ni_cpi",
+      "source": "imf",
+      "id": "CPI {'COUNTRY': 'NIC', 'FREQUENCY': 'M', 'INDEX_TYPE': 'CPI', 'COICOP_1999': '_T', 'TYPE_OF_TRANSFORMATION': 'SRP_IX'}",
+      "transform": "log100",
+      "scale": 1.0,
+      "description": "Nicaragua CPI, all items, spliced index, NSA (IMF CPI)"
+    },
+    {
+      "name": "ni_m2",
+      "source": "imf",
+      "id": "MFS_DC {'COUNTRY': 'NIC', 'FREQUENCY': 'M', 'INDICATOR': 'DCORP_L_BM', 'TYPE_OF_TRANSFORMATION': 'SA_XDC'}",
+      "transform": "log100",
+      "scale": 1.0,
+      "description": "Nicaragua broad money, depository corporations survey, SA (IMF MFS)"
+    },
+    {
+      "name": "ni_er",
+      "source": "imf",
+      "id": "ER {'COUNTRY': 'NIC', 'FREQUENCY': 'M', 'INDICATOR': 'XDC_USD', 'TYPE_OF_TRANSFORMATION': 'PA_RT'}",
+      "transform": "log100",
+      "scale": 1.0,
+      "description": "Cordobas per U.S. dollar, period average (IMF ER)"
+    }
+  ]
+}

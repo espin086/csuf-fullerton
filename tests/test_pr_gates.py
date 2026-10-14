@@ -29,8 +29,8 @@ def repo(tmp_path: Path) -> Path:
     git(r, "config", "user.name", "t")
     (r / ".github" / "scripts").mkdir(parents=True)
     shutil.copy(SCRIPT, r / ".github" / "scripts" / "check_pr_gates.py")
-    (r / "src" / "project_template").mkdir(parents=True)
-    (r / "src" / "project_template" / "__about__.py").write_text('__version__ = "0.1.0"\n')
+    (r / "src" / "csuf_fullerton").mkdir(parents=True)
+    (r / "src" / "csuf_fullerton" / "__about__.py").write_text('__version__ = "0.1.0"\n')
     (r / "CHANGELOG.md").write_text("# Changelog\n\n## [Unreleased]\n\n## [0.1.0] - 2026-01-01\n")
     (r / "openspec" / "changes").mkdir(parents=True)
     git(r, "add", "-A")
@@ -76,7 +76,7 @@ def commit(repo: Path, msg: str = "c") -> str:
 
 def test_src_change_without_spec_or_changelog_fails(repo: Path) -> None:
     base = git(repo, "rev-parse", "HEAD")
-    (repo / "src" / "project_template" / "x.py").write_text("x = 1\n")
+    (repo / "src" / "csuf_fullerton" / "x.py").write_text("x = 1\n")
     head = commit(repo)
     code, out = run(repo, base, head)
     assert code == 1
@@ -86,7 +86,7 @@ def test_src_change_without_spec_or_changelog_fails(repo: Path) -> None:
 
 def test_labels_bypass(repo: Path) -> None:
     base = git(repo, "rev-parse", "HEAD")
-    (repo / "src" / "project_template" / "x.py").write_text("x = 1\n")
+    (repo / "src" / "csuf_fullerton" / "x.py").write_text("x = 1\n")
     head = commit(repo)
     code, out = run(repo, base, head, labels="skip-openspec,skip-changelog")
     assert code == 0, out
@@ -94,7 +94,7 @@ def test_labels_bypass(repo: Path) -> None:
 
 def test_spec_and_changelog_pass(repo: Path) -> None:
     base = git(repo, "rev-parse", "HEAD")
-    (repo / "src" / "project_template" / "x.py").write_text("x = 1\n")
+    (repo / "src" / "csuf_fullerton" / "x.py").write_text("x = 1\n")
     (repo / "openspec" / "changes" / "0001-x").mkdir()
     (repo / "openspec" / "changes" / "0001-x" / "proposal.md").write_text("# x\n")
     (repo / "CHANGELOG.md").write_text(
@@ -107,7 +107,7 @@ def test_spec_and_changelog_pass(repo: Path) -> None:
 
 def test_version_bump_needs_section(repo: Path) -> None:
     base = git(repo, "rev-parse", "HEAD")
-    (repo / "src" / "project_template" / "__about__.py").write_text('__version__ = "0.2.0"\n')
+    (repo / "src" / "csuf_fullerton" / "__about__.py").write_text('__version__ = "0.2.0"\n')
     head = commit(repo)
     code, out = run(
         repo, base, head, title="release: v0.2.0", labels="skip-openspec,skip-changelog"
@@ -176,7 +176,7 @@ def test_issue_gate_exempts_bots_and_ignores_labels(repo: Path) -> None:
 def test_bots_are_exempt_from_openspec_changelog_and_title_gates(repo: Path) -> None:
     base = git(repo, "rev-parse", "HEAD")
     (repo / "pyproject.toml").write_text('[project]\nname = "x"\n')
-    (repo / "src" / "project_template" / "x.py").write_text("x = 1\n")
+    (repo / "src" / "csuf_fullerton" / "x.py").write_text("x = 1\n")
     head = commit(repo)
     title = "deps: bump typer from 0.12 to 0.15"
     bot = run(repo, base, head, title=title, body="", author="dependabot[bot]", linked="0")
@@ -189,7 +189,7 @@ def test_bots_are_exempt_from_openspec_changelog_and_title_gates(repo: Path) -> 
 
 def test_bots_still_hit_the_version_gate(repo: Path) -> None:
     base = git(repo, "rev-parse", "HEAD")
-    (repo / "src" / "project_template" / "__about__.py").write_text('__version__ = "0.2.0"\n')
+    (repo / "src" / "csuf_fullerton" / "__about__.py").write_text('__version__ = "0.2.0"\n')
     head = commit(repo)
     code, out = run(repo, base, head, title="x", body="", author="dependabot[bot]", linked="0")
     assert code == 1

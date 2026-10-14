@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from project_template.core.greeting import greet
+from csuf_fullerton.core.greeting import greet
 
 
 def test_greet_trims_and_formats() -> None:

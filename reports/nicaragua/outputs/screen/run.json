@@ -1,0 +1,40 @@
+{
+  "command": "screen",
+  "data": "data/nicaragua.csv",
+  "data_sha256": "0d8c196a726385047cd54f2212f4b23203dae368c53ada861b301ef99da70bf2",
+  "theory": "examples/nicaragua/theory.toml",
+  "config": {
+    "alpha": 0.05,
+    "max_lags": 4,
+    "lags": null,
+    "lag_criterion": "bic",
+    "horizon": 24,
+    "oos_fraction": 0.25,
+    "portmanteau_h": 12,
+    "dmax": null,
+    "lingam_draws": 100,
+    "wald_draws": 199,
+    "seed": 20261014
+  },
+  "p": 1,
+  "dmax": 2,
+  "sample": [
+    "2002-03",
+    "2014-06"
+  ],
+  "recommended": {
+    "foreign": [
+      "ffr",
+      "us_ip",
+      "commodity",
+      "ni_er"
+    ],
+    "domestic": [
+      "ni_ip",
+      "ni_cpi",
+      "ni_m2"
+    ]
+  },
+  "package_version": "0.1.0",
+  "created": "2026-10-14T22:14:11+00:00"
+}

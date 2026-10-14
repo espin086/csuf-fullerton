@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-from project_template import __version__
-from project_template.cli.main import app
+from csuf_fullerton import __version__
+from csuf_fullerton.cli.main import app
 
 runner = CliRunner()
 
