@@ -64,6 +64,11 @@ The tool SHALL estimate M2 (kernel weighted least squares per block, bandwidth `
 (TVP-VAR with stochastic volatility, Del Negro and Primiceri 2015 sampler order) on the same
 data and report date-specific impulse responses.
 
+#### Scenario: Kernel bandwidth too small
+- **WHEN** the kernel window leaves fewer effective observations at the sample ends than twice
+  the regressors per equation
+- **THEN** the run SHALL stop with a message naming the bandwidth and the regressor count
+
 #### Scenario: Flat kernel equals constant model
 - **WHEN** M2 runs with an infinite bandwidth
 - **THEN** its coefficients at every date SHALL equal the 0002 estimate within 1e-8

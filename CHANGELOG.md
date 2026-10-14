@@ -14,6 +14,11 @@ PyPI publishes that version (see `docs/RELEASING.md`).
 - `fetch` command: FRED and IMF SDMX series from a TOML recipe into one aligned CSV with a sources sidecar (change 0004).
 - `init` command: stores a FRED API key in the OS keychain or a `0600` file; `FRED_API_KEY` takes precedence (change 0004).
 - Nicaragua example (`examples/nicaragua/`) and report (`reports/nicaragua/report.md`, Word version, estimation-sample and candidate CSVs).
+- `tvsvar` command: time-varying block-exogenous SVARs for a small open economy whose main trading partner changes. M0 constant baseline with Chow and bootstrap sup-LR stability tests; M1 trade-weighted SVAR (`star` GVAR loading and `interacted` variants) with impulse responses at frozen trade weights, draw-by-draw difference bands and bootstrap LR tests of time variation; M2 kernel time-varying SVAR (Giraitis, Kapetanios and Yates 2014) with a bandwidth guard; M3 TVP-VAR with stochastic volatility (Primiceri 2005, Del Negro and Primiceri 2015 sampler order) on a precision-based smoother. Block exogeneity holds at every date and in every draw (#16, change 0005).
+- `trade-weights` command: annual goods exports plus imports by partner from IMF IMTS, for moving-average trade weights (change 0005).
+- `replicate` command and `replication/` registry: simulation-recovery, software-parity (statsmodels VAR and Kalman smoother, change 0002 estimator) and published-result cases (Primiceri 2005 volatility peak, Cesa-Bianchi et al. 2012 direction, Nicaragua regression) with SHA-256-pinned fixtures, golden values, `scorecard.json` and `replication.md`. The fast suite runs in `make check` and CI; the full suite runs by `workflow_dispatch` (change 0005).
+- Brazil example (`examples/brazil/`) and report (`reports/brazil/report.md`) with every output rebuilt by `scripts/reproduce_brazil.sh`; `scripts/reproduce_nicaragua.sh` and `scripts/compare_outputs.py` rebuild and verify the Nicaragua report; `QUICKSTART.md` walks through both (change 0005).
+- Secret scanning: `make secrets` (gitleaks over history and the working tree), GitHub secret scanning with push protection, and a test that the FRED key never reaches fetched data or records (change 0005).
 
 ### Changed
 

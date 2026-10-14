@@ -250,3 +250,51 @@ matplotlib). `tomllib` is in the standard library for Python 3.11.
   thesis, with M3 as robustness, or does the committee expect M3 first?
 - Quarterly from 1996 or monthly from 2002?
 - Which partners besides the U.S. and China: euro area, Argentina, or rest of world only?
+
+## Implementation notes (2026-10-14)
+
+Decisions taken while building, each with the evidence that forced it. The spec deltas were
+amended to match where a requirement changed.
+
+1. **Monthly data and activity measures.** Neither the IMF API nor FRED carries a quarterly real
+   GDP index for China before 2011. The Brazil recipe is monthly and uses the OECD GDP reference
+   series (normalised cycle) for both the U.S. and China, so the two partners' activity is on
+   the same scale and can be trade-weighted. Trade comes from IMF IMTS (goods exports FOB plus
+   imports CIF), which replaced the Direction of Trade Statistics extract on the IMF API.
+2. **Sample.** The screen on 1996-10 to 2023-11 rejects normality in every residual (2020) and
+   straddles the January 1999 float and the June 1999 inflation-targeting regime. On 1999-07 to
+   2019-12 the block-exogeneity restriction holds (bootstrap lag-augmented Wald p = 0.37) and
+   every surviving specification agrees on the headline signs. That is the headline sample; the
+   sample through 2023-11 is a robustness run.
+3. **Lag order.** AIC 6, BIC 4, HQ 5. Headline p = 4 (BIC). The screen rejects block exogeneity
+   at p = 2 and accepts it at p = 6, so results are reported at p = 2, 4 and 6.
+4. **M1 regressors.** Partner variables are centred at their sample mean inside the weight
+   products, and the weights enter on their own (`levels`), so a product cannot act as a
+   disguised trend. The LR null for "weights do not change transmission" is therefore `levels`.
+5. **M1 inference.** Hall intervals are the default: percentile bands left point estimates
+   outside their own band in the levels VAR. LR tests also get a bootstrap p-value that
+   regenerates data from the restricted model along the observed weight path.
+6. **M1 coverage target.** 40 replications of the M1 DGP at T = 400 gave 90% Hall bands
+   covering 0.82 (first year), 0.82 (last year) and 0.76 (difference). Bootstrap IRF bands
+   under-cover in samples this size (Kilian 1998). The full-suite targets are 0.80, 0.80 and
+   0.75 rather than the 0.85 first planned.
+7. **M0 rolling window** dropped: M2 gives the same picture with a defined bandwidth.
+8. **M2 bandwidth.** GKY's `T^0.5` leaves about 28 effective observations at the sample ends,
+   fewer than the 49 regressors of an eight-variable, four-lag monthly equation with seasonal
+   dummies; local fits became singular. The estimator now stops when the Kish effective sample
+   at the ends is below twice the regressors. Brazil uses `T^0.7`, p = 2 and a local constant.
+9. **M3 data.** Levels near 100 (OECD cycles) and log levels near 500 made the OLS prior
+   precision near singular. The Brazil M3 run uses a four-variable system (U.S. and China
+   activity, Brazil IP and CPI as 12-month changes) and centres each series; no training sample
+   is long enough after 1999, so the prior comes from full-sample OLS and the report says so.
+10. **M3 parity.** The exact check is the conditional posterior mean of the coefficient states
+    against the statsmodels Kalman smoother (agreement to 1e-14). R is not installed here, so
+    the `bvarsv` fixture is deferred; the Primiceri (2005) published case checks the full
+    sampler instead: posterior median interest-rate volatility peaks in 1980Q4.
+11. **M3 simulation design.** Primiceri's priors (`k_Q = 0.01`, 40 prior degrees of freedom)
+    shrink coefficient drift hard. A DGP whose drift is far outside the prior (standard
+    deviation 0.01 a month) is not recovered by any correct sampler with these priors, so the
+    recovery case draws drift on the prior's scale (0.003) and log-volatility steps of 0.05.
+12. **Cesa-Bianchi direction case.** p = 4 on 1999-07 to 2009-12, 1995 against 2009 weights,
+    mean response over months 0 to 24. With p = 2 the China change is positive over months
+    0 to 12 and slightly negative over 12 to 24; the report carries the table.
