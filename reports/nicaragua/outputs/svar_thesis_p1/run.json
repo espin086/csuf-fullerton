@@ -1,0 +1,57 @@
+{
+  "command": "svar",
+  "data": "data/nicaragua.csv",
+  "data_sha256": "0d8c196a726385047cd54f2212f4b23203dae368c53ada861b301ef99da70bf2",
+  "settings": {
+    "foreign": [
+      "ffr",
+      "us_ip",
+      "commodity"
+    ],
+    "domestic": [
+      "ni_ip",
+      "ni_cpi",
+      "ni_m2",
+      "ni_er"
+    ],
+    "lags": 1,
+    "max_lags": 6,
+    "trend": true,
+    "seasonal": true,
+    "horizon": 24,
+    "draws": 1000,
+    "level": 0.68,
+    "band_method": "hall",
+    "dmax": 2,
+    "seed": 20261014
+  },
+  "p": 1,
+  "sample": [
+    "2002-03",
+    "2014-06"
+  ],
+  "lag_criteria": {
+    "aic": 4,
+    "bic": 1,
+    "hq": 1
+  },
+  "tests": {
+    "block exogeneity LR (Sims)": {
+      "stat": 131.0727116290243,
+      "df": 12,
+      "p": 3.758775880798445e-22
+    },
+    "lag-augmented Wald (p=1, d_max=2)": {
+      "stat": 14.789333737006078,
+      "df": 12,
+      "p": 0.25315990291070417
+    },
+    "portmanteau (h=12)": {
+      "stat": 1085.211120707563,
+      "df": 539,
+      "p": 4.745546359891487e-39
+    }
+  },
+  "package_version": "0.1.0",
+  "created": "2026-10-14T22:15:24+00:00"
+}
