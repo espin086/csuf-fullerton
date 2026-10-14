@@ -1,0 +1,36 @@
+# Full replication suite (change 0005): every Monte Carlo case and the long MCMC runs.
+# Manual only, to keep Actions minutes down; the fast suite runs on every PR in ci.yml.
+name: Replication (full)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_COLOR: "1"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  full:
+    name: Full replication suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - run: pip install -e ".[dev]"
+      - name: Replicate (fast and full cases)
+        run: csuf-fullerton replicate --suite full --out results/replication-full
+      - name: Upload scorecard
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: replication-full
+          path: results/replication-full/
+          if-no-files-found: ignore
