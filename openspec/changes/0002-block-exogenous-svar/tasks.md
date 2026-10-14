@@ -6,7 +6,7 @@ Feature: [#2](https://github.com/espin086/csuf-fullerton/issues/2) (closed by th
 - [x] P1. Tracking issues #2 (feature), #3 (plan), #5 (agent workflow, change 0003).
 - [x] P2. Proposal, design and spec delta in this folder.
 - [ ] P3. Maintainer merges the planning PR.
-- [ ] 1. Rename `project_template` to `csuf_fullerton` with `scripts/rename.py`; switch
+- [ ] 1. Rename `csuf_fullerton` to `csuf_fullerton` with `scripts/rename.py`; switch
   `make install` from uv to `python -m venv .venv && .venv/bin/python -m pip install -e ".[dev]"`.
   Proof: `make check` green.
 - [ ] 2. `core/svar/data.py` and `blocks.py`: column checks, missing values, sample alignment,

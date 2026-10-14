@@ -126,8 +126,8 @@ jobs:
           python -m venv /tmp/smoke
           /tmp/smoke/bin/pip install --upgrade pip
           /tmp/smoke/bin/pip install dist/*.whl
-          /tmp/smoke/bin/project-template --version
-          /tmp/smoke/bin/python -c "import project_template; print(project_template.__version__)"
+          /tmp/smoke/bin/csuf-fullerton --version
+          /tmp/smoke/bin/python -c "import csuf_fullerton; print(csuf_fullerton.__version__)"
       - name: Confirm the sdist builds a wheel
         run: |
           python -m venv /tmp/sdist
@@ -150,15 +150,15 @@ jobs:
         with:
           context: .
           load: true
-          tags: ci/project-template:${{ github.sha }}
+          tags: ci/csuf-fullerton:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Smoke test
-        run: docker run --rm "ci/project-template:${{ github.sha }}" --version
+        run: docker run --rm "ci/csuf-fullerton:${{ github.sha }}" --version
       - name: Scan image for known vulnerabilities
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: ci/project-template:${{ github.sha }}
+          image-ref: ci/csuf-fullerton:${{ github.sha }}
           format: table
           exit-code: "1"
           ignore-unfixed: true

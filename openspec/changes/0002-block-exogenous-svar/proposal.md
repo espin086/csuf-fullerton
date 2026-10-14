@@ -48,7 +48,7 @@ Nicaragua. That is the small open economy block structure of Cushman and Zha (19
 - A `svar` CLI command (Typer) that reads a CSV, writes CSV/PNG outputs and `run.json`.
 - Known-answer tests on simulated block-exogenous data, and a cross-check against Stata's
   `var ... constraints()` on one dataset.
-- Package rename from the template (`project_template` to `csuf_fullerton`) and a pip-based
+- Package rename from the template (`csuf_fullerton` to `csuf_fullerton`) and a pip-based
   `make install`, done as task 1 since every later task depends on the package name.
 - Docs: a worked example a student can copy, including how to swap in another country.
 

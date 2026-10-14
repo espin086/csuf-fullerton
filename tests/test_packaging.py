@@ -6,7 +6,7 @@ import re
 import tomllib
 from pathlib import Path
 
-from project_template import __version__
+from csuf_fullerton import __version__
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -25,8 +25,8 @@ def test_version_regex_matches_release_script() -> None:
 
 def test_pyproject_points_at_about() -> None:
     data = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text())
-    assert data["tool"]["hatch"]["version"]["path"] == "src/project_template/__about__.py"
-    assert data["project"]["name"] == "project-template"
+    assert data["tool"]["hatch"]["version"]["path"] == "src/csuf_fullerton/__about__.py"
+    assert data["project"]["name"] == "csuf-fullerton"
 
 
 def test_changelog_mentions_current_version() -> None:

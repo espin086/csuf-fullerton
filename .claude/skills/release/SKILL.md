@@ -12,7 +12,7 @@ use the standard PR template. An active change folder alone is insufficient auth
 # /release <x.y.z>
 
 1. On `main`, pulled. `git switch -c release/v$0`.
-2. `src/project_template/__about__.py`: `__version__ = "$0"`.
+2. `src/csuf_fullerton/__about__.py`: `__version__ = "$0"`.
 3. `CHANGELOG.md`: rename `[Unreleased]` to `[$0] - <today>`, add an empty `[Unreleased]`
    above, update the two link refs at the bottom.
 4. `pytest tests/test_packaging.py tests/test_release_script.py -q` and

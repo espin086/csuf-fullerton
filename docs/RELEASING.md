@@ -4,7 +4,7 @@ Releases are version-gated pushes to `main`. There is no release branch and no m
 
 ## Every release
 
-1. Bump `__version__` in `src/project_template/__about__.py` (SemVer: `1.2.3`, `1.2.3rc1`,
+1. Bump `__version__` in `src/csuf_fullerton/__about__.py` (SemVer: `1.2.3`, `1.2.3rc1`,
    `1.2.3.dev0`).
 2. In `CHANGELOG.md`, rename `## [Unreleased]` to `## [1.2.3] - YYYY-MM-DD`, add a fresh empty
    `[Unreleased]` above it, update the link refs at the bottom.

@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "project-template"
+name = "csuf-fullerton"
 dynamic = ["version"]
 description = "Project template: Python CLI + library, Docker image, PyPI release, OpenSpec-gated changes, Claude and Codex harness."
 readme = "README.md"
@@ -37,7 +37,7 @@ dev = [
 ]
 
 [project.scripts]
-project-template = "project_template.cli.main:app"
+csuf-fullerton = "csuf_fullerton.cli.main:app"
 
 [project.urls]
 Homepage = "https://github.com/espin086/template-python-cli"
@@ -46,10 +46,10 @@ Changelog = "https://github.com/espin086/template-python-cli/blob/main/CHANGELOG
 Source = "https://github.com/espin086/template-python-cli"
 
 [tool.hatch.version]
-path = "src/project_template/__about__.py"
+path = "src/csuf_fullerton/__about__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/project_template"]
+packages = ["src/csuf_fullerton"]
 
 [tool.hatch.build.targets.sdist]
 # Project context is design history, not distributable code.
@@ -63,7 +63,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["project_template"]
+source = ["csuf_fullerton"]
 branch = true
 
 [tool.coverage.report]
@@ -89,6 +89,6 @@ select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF", "S"]
 
 [tool.mypy]
 python_version = "3.11"
-packages = ["project_template"]
+packages = ["csuf_fullerton"]
 strict = true
 warn_unreachable = true

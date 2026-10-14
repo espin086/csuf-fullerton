@@ -1,7 +1,7 @@
 schema: spec-driven
 
 context: |
-  Python 3.11+ CLI and library built from the project-template. Pure logic in
+  Python 3.11+ CLI and library built from the csuf-fullerton. Pure logic in
   src/<pkg>/core/ (no I/O, no logging, no env); thin adapters in cli/. Typer + Rich.
   Tests: pytest, known-answer fixtures, network tests marked and excluded from CI.
   No change to src/, .github/, .claude/, Dockerfile or pyproject.toml ships without a

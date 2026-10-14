@@ -5,8 +5,8 @@ from __future__ import annotations
 import typer
 from rich.console import Console
 
-from project_template.__about__ import __version__
-from project_template.core.greeting import greet
+from csuf_fullerton.__about__ import __version__
+from csuf_fullerton.core.greeting import greet
 
 app = typer.Typer(no_args_is_help=True, add_completion=False)
 console = Console()
@@ -29,7 +29,7 @@ def main(
         help="Print the version and exit.",
     ),
 ) -> None:
-    """project-template command line."""
+    """csuf-fullerton command line."""
 
 
 @app.command()

@@ -27,7 +27,7 @@ COPY --from=build /dist/*.whl /tmp/
 RUN pip install --no-cache-dir /tmp/*.whl && rm -f /tmp/*.whl
 USER 10001:10001
 WORKDIR /home/app
-ENTRYPOINT ["project-template"]
+ENTRYPOINT ["csuf-fullerton"]
 CMD ["--help"]
 
 LABEL org.opencontainers.image.source="https://github.com/espin086/template-python-cli" \

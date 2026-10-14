@@ -1,4 +1,4 @@
-# project-template
+# csuf-fullerton
 
 [Project home page](site/index.html) · [Contribution workflow](CONTRIBUTING.md) · [Claude/Codex harness](docs/AGENT-HARNESS.md) · [Hosting profiles](docs/HOSTING-PROFILES.md)
 
@@ -33,7 +33,7 @@ Then follow `docs/RELEASING.md` one-time setup (PyPI trusted publisher, `ANTHROP
 ## Layout
 
 ```
-src/project_template/   core/ (pure logic)  cli/ (Typer adapter)  __about__.py (version)
+src/csuf_fullerton/   core/ (pure logic)  cli/ (Typer adapter)  __about__.py (version)
 tests/                  core, cli, architecture, packaging, release-script and gate contracts
 openspec/               config.yaml, project.md, changes/, specs/
 .claude/                settings.json, hooks/, agents/, skills/, rules/  (see docs/HARNESS.md)

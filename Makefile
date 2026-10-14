@@ -2,7 +2,7 @@
 .PHONY: install lint typecheck test build docker audit openspec check
 
 install:
-	uv venv --allow-existing && uv pip install -e ".[dev]" build twine && pre-commit install
+	python3.12 -m venv .venv && .venv/bin/python -m pip install -e ".[dev]" build twine && .venv/bin/pre-commit install
 
 lint:
 	ruff check . && ruff format --check .
@@ -17,7 +17,7 @@ build:
 	python -m build && twine check --strict dist/*
 
 docker:
-	docker build -t espin086/project-template:local . && docker run --rm espin086/project-template:local --version
+	docker build -t espin086/csuf-fullerton:local . && docker run --rm espin086/csuf-fullerton:local --version
 
 audit:
 	pip freeze --exclude-editable > requirements-audit.txt && pip-audit --strict -r requirements-audit.txt

@@ -32,7 +32,7 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-ABOUT = Path("src/project_template/__about__.py")
+ABOUT = Path("src/csuf_fullerton/__about__.py")
 
 MAJOR_PREFIXES = ("src/", ".github/", ".claude/", "Dockerfile", "pyproject.toml", "compose.yaml")
 TITLE_RE = re.compile(

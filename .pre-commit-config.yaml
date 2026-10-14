@@ -41,7 +41,7 @@ repos:
     rev: v1.14.1
     hooks:
       - id: mypy
-        files: ^src/project_template/
+        files: ^src/csuf_fullerton/
         additional_dependencies:
           - typer>=0.12
           - rich>=13.7
