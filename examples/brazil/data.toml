@@ -1,0 +1,68 @@
+# Brazil small-open-economy dataset, monthly, for the time-varying SVAR (change 0005).
+# Foreign block: world commodity prices, U.S. and China activity, the federal funds rate.
+# Domestic block: Brazilian industrial production, CPI, the Selic rate and the real per dollar.
+# U.S. and China activity use the same OECD measure (GDP reference series, normalised cycle,
+# index around 100) so the two can be combined with trade weights. Logs are scaled by 100.
+
+[meta]
+frequency = "M"
+start = "1996-10"   # first month of the Selic series on FRED
+end = "2023-11"     # last month of the OECD GDP reference series and IMF Brazil IP
+
+[[series]]
+name = "commodity"
+source = "fred"
+id = "PALLFNFINDEXM"
+transform = "log100"
+description = "IMF global price index of all commodities (via FRED)"
+
+[[series]]
+name = "us_act"
+source = "fred"
+id = "USALORSGPNOSTSAM"
+transform = "level"
+description = "U.S. activity: OECD GDP reference series, normalised, SA (index, trend = 100)"
+
+[[series]]
+name = "cn_act"
+source = "fred"
+id = "CHNLORSGPNOSTSAM"
+transform = "level"
+description = "China activity: OECD GDP reference series, normalised, SA (index, trend = 100)"
+
+[[series]]
+name = "ffr"
+source = "fred"
+id = "FEDFUNDS"
+transform = "level"
+description = "Effective federal funds rate, percent"
+
+[[series]]
+name = "br_ip"
+source = "imf"
+dataflow = "PI"
+filters = { COUNTRY = "BRA", FREQUENCY = "M", PRODUCTION_INDEX = "IND", TYPE_OF_TRANSFORMATION = "SA_IX" }
+transform = "log100"
+description = "Brazil industrial production index, SA (IMF PI)"
+
+[[series]]
+name = "br_cpi"
+source = "fred"
+id = "BRACPIALLMINMEI"
+transform = "log100"
+description = "Brazil CPI, all items, NSA (OECD MEI via FRED)"
+
+[[series]]
+name = "br_selic"
+source = "fred"
+id = "IRSTCI01BRM156N"
+transform = "level"
+description = "Brazil overnight interbank rate (Selic), percent (OECD MEI via FRED)"
+
+[[series]]
+name = "br_er"
+source = "imf"
+dataflow = "ER"
+filters = { COUNTRY = "BRA", FREQUENCY = "M", INDICATOR = "XDC_USD", TYPE_OF_TRANSFORMATION = "PA_RT" }
+transform = "log100"
+description = "Reais per U.S. dollar, period average (IMF ER)"

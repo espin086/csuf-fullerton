@@ -1,0 +1,70 @@
+{
+  "retrieved": "2026-10-14T23:02:45+00:00",
+  "fred_access": "fredgraph",
+  "series": [
+    {
+      "name": "commodity",
+      "source": "fred",
+      "id": "PALLFNFINDEXM",
+      "transform": "log100",
+      "scale": 1.0,
+      "description": "IMF global price index of all commodities (via FRED)"
+    },
+    {
+      "name": "us_act",
+      "source": "fred",
+      "id": "USALORSGPNOSTSAM",
+      "transform": "level",
+      "scale": 1.0,
+      "description": "U.S. activity: OECD GDP reference series, normalised, SA (index, trend = 100)"
+    },
+    {
+      "name": "cn_act",
+      "source": "fred",
+      "id": "CHNLORSGPNOSTSAM",
+      "transform": "level",
+      "scale": 1.0,
+      "description": "China activity: OECD GDP reference series, normalised, SA (index, trend = 100)"
+    },
+    {
+      "name": "ffr",
+      "source": "fred",
+      "id": "FEDFUNDS",
+      "transform": "level",
+      "scale": 1.0,
+      "description": "Effective federal funds rate, percent"
+    },
+    {
+      "name": "br_ip",
+      "source": "imf",
+      "id": "PI {'COUNTRY': 'BRA', 'FREQUENCY': 'M', 'PRODUCTION_INDEX': 'IND', 'TYPE_OF_TRANSFORMATION': 'SA_IX'}",
+      "transform": "log100",
+      "scale": 1.0,
+      "description": "Brazil industrial production index, SA (IMF PI)"
+    },
+    {
+      "name": "br_cpi",
+      "source": "fred",
+      "id": "BRACPIALLMINMEI",
+      "transform": "log100",
+      "scale": 1.0,
+      "description": "Brazil CPI, all items, NSA (OECD MEI via FRED)"
+    },
+    {
+      "name": "br_selic",
+      "source": "fred",
+      "id": "IRSTCI01BRM156N",
+      "transform": "level",
+      "scale": 1.0,
+      "description": "Brazil overnight interbank rate (Selic), percent (OECD MEI via FRED)"
+    },
+    {
+      "name": "br_er",
+      "source": "imf",
+      "id": "ER {'COUNTRY': 'BRA', 'FREQUENCY': 'M', 'INDICATOR': 'XDC_USD', 'TYPE_OF_TRANSFORMATION': 'PA_RT'}",
+      "transform": "log100",
+      "scale": 1.0,
+      "description": "Reais per U.S. dollar, period average (IMF ER)"
+    }
+  ]
+}

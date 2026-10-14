@@ -1,0 +1,87 @@
+{
+  "command": "tvsvar",
+  "model": "m0",
+  "data": "data/brazil.csv",
+  "data_sha256": "d3c48d85243448b0b8c5b59c42c20d9283342615ce32036ed18d156c1661df89",
+  "trade": null,
+  "trade_sha256": null,
+  "weight_window": 3,
+  "weights_lag": 1,
+  "settings": {
+    "foreign": [
+      "commodity",
+      "us_act",
+      "cn_act",
+      "ffr"
+    ],
+    "domestic": [
+      "br_ip",
+      "br_cpi",
+      "br_selic",
+      "br_er"
+    ],
+    "partners": [],
+    "lags": 4,
+    "max_lags": 6,
+    "trend": true,
+    "seasonal": true,
+    "horizon": 24,
+    "draws": 1000,
+    "level": 0.68,
+    "frozen_years": [],
+    "variant": "interacted",
+    "band_method": "hall",
+    "lr_draws": 199,
+    "break_date": "2009-01",
+    "break_draws": 199,
+    "bandwidth_exp": 0.5,
+    "kernel_step": 1,
+    "headlines": [],
+    "m3_vars": [],
+    "m3_foreign": 0,
+    "m3_diff12": [],
+    "seed": 20261014,
+    "tvp": {
+      "p": 2,
+      "draws": 10000,
+      "burn": 2000,
+      "thin": 4,
+      "training": 0,
+      "k_q": 0.01,
+      "k_s": 0.1,
+      "k_w": 0.01,
+      "tau": 40,
+      "seed": 20261014
+    }
+  },
+  "start": "1999-07",
+  "end": "2019-12",
+  "p": 4,
+  "sample": [
+    "1999-11",
+    "2019-12"
+  ],
+  "stability": [
+    {
+      "name": "Chow LR at the chosen date, domestic block",
+      "stat": 491.70058196099234,
+      "df": 196,
+      "asymptotic_p": 2.272780851323259e-27,
+      "bootstrap_p": 0.01,
+      "break_index": 110,
+      "draws": 199
+    },
+    {
+      "name": "sup-LR (Andrews 1993), domestic block",
+      "stat": 758.7747007869958,
+      "df": 196,
+      "asymptotic_p": null,
+      "bootstrap_p": 0.005,
+      "break_index": 52,
+      "draws": 199
+    }
+  ],
+  "sup_date": "2004-03",
+  "package_version": "0.1.0",
+  "created": "2026-10-14T23:49:07+00:00"
+}

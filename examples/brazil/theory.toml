@@ -1,0 +1,85 @@
+# Theory priors for the Brazil small-open-economy SVAR (change 0005).
+# prior = exogenous | candidate | endogenous. Every prior carries its argument and a source.
+
+[meta]
+country = "Brazil"
+frequency = "M"
+deterministic = { trend = true, seasonal = true }   # CPI is not seasonally adjusted
+
+[[variable]]
+name = "commodity"
+prior = "exogenous"
+rationale = "World commodity price index. Brazil is a large exporter of soybeans and iron ore, so it is not a pure price taker in every market, but the all-commodity index is dominated by energy, where Brazil has no pricing power at a monthly frequency."
+source = "Kim and Roubini (2000); Cesa-Bianchi et al. (2012) on the commodity channel"
+
+[[variable]]
+name = "us_act"
+prior = "exogenous"
+rationale = "U.S. activity. Brazil's economy is under a tenth the size of the U.S. economy and U.S. exports to Brazil are about 1% of U.S. GDP; no plausible monthly feedback."
+source = "Cushman and Zha (1997); Mackowiak (2007)"
+
+[[variable]]
+name = "cn_act"
+prior = "exogenous"
+rationale = "China activity. Brazil is China's main soybean and a major iron ore supplier, which makes this the weakest exogeneity claim in the model; the screen tests it."
+source = "Cesa-Bianchi et al. (2012)"
+
+[[variable]]
+name = "ffr"
+prior = "exogenous"
+rationale = "U.S. policy rate; the FOMC does not react to Brazilian conditions."
+source = "Cushman and Zha (1997)"
+
+[[variable]]
+name = "br_ip"
+prior = "endogenous"
+rationale = "Domestic activity."
+source = ""
+
+[[variable]]
+name = "br_cpi"
+prior = "endogenous"
+rationale = "Domestic prices."
+source = ""
+
+[[variable]]
+name = "br_selic"
+prior = "endogenous"
+rationale = "Policy rate under inflation targeting since June 1999; reacts to domestic inflation and activity."
+source = "Banco Central do Brasil inflation-targeting regime"
+
+[[variable]]
+name = "br_er"
+prior = "endogenous"
+rationale = "Floating real per dollar since January 1999; reacts to domestic and foreign shocks within the month."
+source = "Banco Central do Brasil exchange-rate regime"
+
+[candidates]
+min_foreign = 1
+max_foreign = 4
+
+[[spec]]
+name = "four-variable foreign block"
+foreign = ["commodity", "us_act", "cn_act", "ffr"]
+
+[[ordering]]
+domestic = ["br_selic", "br_ip", "br_cpi", "br_er"]
+
+[[ordering]]
+domestic = ["br_er", "br_ip", "br_cpi", "br_selic"]
+
+[[headline]]
+response = "br_ip"
+shock = "cn_act"
+
+[[headline]]
+response = "br_ip"
+shock = "us_act"
+
+[[headline]]
+response = "br_cpi"
+shock = "commodity"
+
+[[headline]]
+response = "br_ip"
+shock = "ffr"

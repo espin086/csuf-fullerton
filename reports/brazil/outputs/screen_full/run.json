@@ -1,0 +1,41 @@
+{
+  "command": "screen",
+  "data": "data/brazil.csv",
+  "data_sha256": "d3c48d85243448b0b8c5b59c42c20d9283342615ce32036ed18d156c1661df89",
+  "theory": "examples/brazil/theory.toml",
+  "config": {
+    "alpha": 0.05,
+    "max_lags": 6,
+    "lags": null,
+    "lag_criterion": "bic",
+    "horizon": 24,
+    "oos_fraction": 0.25,
+    "portmanteau_h": 12,
+    "dmax": null,
+    "lingam_draws": 100,
+    "wald_draws": 199,
+    "seed": 20261014
+  },
+  "p": 5,
+  "dmax": 1,
+  "sample": [
+    "1997-04",
+    "2023-11"
+  ],
+  "recommended": {
+    "foreign": [
+      "commodity",
+      "us_act",
+      "cn_act",
+      "ffr"
+    ],
+    "domestic": [
+      "br_ip",
+      "br_cpi",
+      "br_selic",
+      "br_er"
+    ]
+  },
+  "package_version": "0.1.0",
+  "created": "2026-10-14T23:45:45+00:00"
+}

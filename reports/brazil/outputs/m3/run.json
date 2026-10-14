@@ -1,0 +1,104 @@
+{
+  "command": "tvsvar",
+  "model": "m3",
+  "data": "data/brazil.csv",
+  "data_sha256": "d3c48d85243448b0b8c5b59c42c20d9283342615ce32036ed18d156c1661df89",
+  "trade": null,
+  "trade_sha256": null,
+  "weight_window": 3,
+  "weights_lag": 1,
+  "settings": {
+    "foreign": [
+      "commodity",
+      "us_act",
+      "cn_act",
+      "ffr"
+    ],
+    "domestic": [
+      "br_ip",
+      "br_cpi",
+      "br_selic",
+      "br_er"
+    ],
+    "partners": [],
+    "lags": null,
+    "max_lags": 6,
+    "trend": true,
+    "seasonal": false,
+    "horizon": 24,
+    "draws": 500,
+    "level": 0.68,
+    "frozen_years": [],
+    "variant": "interacted",
+    "band_method": "hall",
+    "lr_draws": 199,
+    "break_date": null,
+    "break_draws": 199,
+    "bandwidth_exp": 0.5,
+    "kernel_step": 1,
+    "headlines": [
+      [
+        "br_ip",
+        "cn_act"
+      ],
+      [
+        "br_ip",
+        "us_act"
+      ]
+    ],
+    "m3_vars": [
+      "us_act",
+      "cn_act",
+      "br_ip",
+      "br_cpi"
+    ],
+    "m3_foreign": 0,
+    "m3_diff12": [
+      "br_ip",
+      "br_cpi"
+    ],
+    "seed": 20261014,
+    "tvp": {
+      "p": 2,
+      "draws": 10000,
+      "burn": 2000,
+      "thin": 4,
+      "training": 0,
+      "k_q": 0.01,
+      "k_s": 0.1,
+      "k_w": 0.01,
+      "tau": 40,
+      "seed": 20261014
+    }
+  },
+  "start": "1999-07",
+  "end": "2019-12",
+  "sample": [
+    "2000-09",
+    "2019-12"
+  ],
+  "diagnostics": {
+    "beta": {
+      "median_inefficiency": 1.863048914196043,
+      "max_inefficiency": 5.9345734966767365,
+      "max_abs_geweke_z": 4.250189869528797
+    },
+    "a": {
+      "median_inefficiency": 2.927886840558594,
+      "max_inefficiency": 6.449347013441622,
+      "max_abs_geweke_z": 3.3365226373291548
+    },
+    "log_var": {
+      "median_inefficiency": 3.239904035787749,
+      "max_inefficiency": 4.24487167329681,
+      "max_abs_geweke_z": 2.5759259272375914
+    },
+    "q_diag": {
+      "median_inefficiency": 8.97608774977255,
+      "max_inefficiency": 13.618743875144649,
+      "max_abs_geweke_z": 2.5872498062706613
+    }
+  },
+  "package_version": "0.1.0",
+  "created": "2026-10-14T23:53:03+00:00"
+}
