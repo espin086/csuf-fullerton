@@ -1,0 +1,16 @@
+id = "m3-parity-kalman"
+model = "m3"
+kind = "parity"
+suite = "fast"
+function = "m3_parity_kalman"
+source = "statsmodels Kalman smoother, conditional posterior mean of the coefficient states"
+seed = 7
+qualitative = false
+
+[settings]
+n = 150
+
+[[metric]]
+name = "max_abs_diff"
+op = "<="
+target = 1e-08

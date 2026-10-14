@@ -1,0 +1,48 @@
+id = "m2-brazil-regression"
+model = "m2"
+kind = "regression"
+suite = "fast"
+function = "m2_brazil_regression"
+source = "Pinned kernel path of Brazil IP on China activity"
+seed = 0
+qualitative = false
+notes = "Bandwidth T^0.7 with p = 2 and a local constant: GKY's T^0.5 leaves too few effective observations at the sample ends for an eight-variable monthly system."
+
+[[data]]
+name = "data"
+path = "data/brazil.csv"
+sha256 = "d3c48d85243448b0b8c5b59c42c20d9283342615ce32036ed18d156c1661df89"
+
+[[data]]
+name = "trade"
+path = "data/brazil_trade.csv"
+sha256 = "1cd5fb83f29b1a4902919f37774fa4ae14e8dc5bf2ea16bf07f8ee8dd23a9d34"
+
+[settings]
+foreign = ["commodity", "us_act", "cn_act", "ffr"]
+domestic = ["br_ip", "br_cpi", "br_selic", "br_er"]
+partners = [["us", ["us_act"]], ["cn", ["cn_act"]]]
+seasonal = true
+trend = false
+window = 3
+weights_lag = 1
+lags = 2
+start = "1999-07"
+end = "2019-12"
+pair = ["br_ip", "cn_act"]
+partner = "cn"
+exponent = 0.7
+
+[[metric]]
+name = "change_last_minus_first_fifth"
+op = "between"
+target = [-50.0, 50.0]
+golden = 13.65466001492786
+golden_tol = 1e-06
+
+[[metric]]
+name = "corr_with_weight"
+op = "between"
+target = [-1.0, 1.0]
+golden = 0.4412989474055987
+golden_tol = 1e-06

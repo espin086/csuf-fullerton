@@ -1,0 +1,24 @@
+id = "m2-sim-sinusoid"
+model = "m2"
+kind = "simulation"
+suite = "fast"
+function = "m2_sim_sinusoid"
+source = "Giraitis, Kapetanios and Yates (2014) style smooth drift"
+seed = 500
+qualitative = false
+
+[settings]
+reps = 5
+n_small = 200
+n_large = 800
+exponent = 0.5
+
+[[metric]]
+name = "mad_ratio"
+op = "<="
+target = 1.0
+
+[[metric]]
+name = "mad_large"
+op = "<="
+target = 0.06

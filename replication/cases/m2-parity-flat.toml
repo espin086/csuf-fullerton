@@ -1,0 +1,25 @@
+id = "m2-parity-flat"
+model = "m2"
+kind = "parity"
+suite = "fast"
+function = "m2_parity_flat"
+source = "Flat kernel equals the change 0002 estimator"
+seed = 0
+qualitative = false
+
+[[data]]
+name = "data"
+path = "data/brazil.csv"
+sha256 = "d3c48d85243448b0b8c5b59c42c20d9283342615ce32036ed18d156c1661df89"
+
+[settings]
+foreign = ["commodity", "us_act", "cn_act", "ffr"]
+domestic = ["br_ip", "br_cpi", "br_selic", "br_er"]
+lags = 4
+start = "1999-07"
+end = "2019-12"
+
+[[metric]]
+name = "max_abs_diff"
+op = "<="
+target = 1e-08

@@ -1,0 +1,33 @@
+id = "m3-sim-coverage-fast"
+model = "m3"
+kind = "simulation"
+suite = "fast"
+function = "m3_sim_coverage"
+source = "TVP-VAR-SV recovery, drift on the prior's scale"
+seed = 600
+qualitative = false
+
+[settings]
+reps = 2
+n = 200
+beta_sd = 0.003
+lv_sd = 0.05
+p = 1
+draws = 1500
+burn = 500
+thin = 2
+
+[[metric]]
+name = "beta_coverage"
+op = ">="
+target = 0.6
+
+[[metric]]
+name = "log_var_coverage"
+op = ">="
+target = 0.6
+
+[[metric]]
+name = "max_foreign_response_to_domestic"
+op = "<="
+target = 0.0

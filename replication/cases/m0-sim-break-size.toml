@@ -1,0 +1,19 @@
+id = "m0-sim-break-size"
+model = "m0"
+kind = "simulation"
+suite = "full"
+function = "m0_sim_break"
+source = "Andrews (1993) sup-LR, bootstrap p, constant-coefficient DGP"
+seed = 12
+qualitative = false
+
+[settings]
+reps = 100
+n = 300
+draws = 99
+scale = 0.0
+
+[[metric]]
+name = "rejection_rate"
+op = "between"
+target = [0.0, 0.1]

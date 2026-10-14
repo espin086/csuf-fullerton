@@ -1,0 +1,19 @@
+id = "m0-sim-break-power"
+model = "m0"
+kind = "simulation"
+suite = "fast"
+function = "m0_sim_break"
+source = "Andrews (1993) sup-LR, bootstrap p, M1 DGP with drifting transmission"
+seed = 11
+qualitative = false
+
+[settings]
+reps = 3
+n = 400
+draws = 49
+scale = 1.0
+
+[[metric]]
+name = "rejection_rate"
+op = ">="
+target = 0.66
