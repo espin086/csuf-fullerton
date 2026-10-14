@@ -1,0 +1,2 @@
+# Fake 32-character FRED key used as a test fixture (tests/cli/test_init.py), not a secret.
+878621240ce58172241045469ac4181f6dfb6cf5:tests/cli/test_init.py:generic-api-key:16
