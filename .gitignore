@@ -25,3 +25,6 @@ requirements-audit.txt
 CLAUDE.local.md
 gitleaks
 gitleaks.tar.gz
+
+# Local run outputs (committed reports live under reports/)
+results/

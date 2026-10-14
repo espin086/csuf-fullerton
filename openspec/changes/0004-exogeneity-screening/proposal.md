@@ -53,7 +53,7 @@ report is the first use.
   unrestricted VAR (Clark and West 2007), and the grading and ranking rules in `design.md`.
 - New `core/svar/theory.py`: a theory file (TOML) that declares each variable's prior role with
   a written rationale and citation, the candidate pool, and alternative orderings.
-- New `fetch` command and `adapters/` package: FRED (API key or keyless CSV fallback) and the
+- New `fetch` command and `data/adapters/` package: FRED (API key or keyless CSV fallback) and the
   IMF SDMX 3.0 API, driven by a TOML recipe, with transforms (log, scale) recorded in the output.
 - New `init` command: prompts for a FRED API key with hidden input and stores it in the OS
   keychain through `keyring`, falling back to a `0600` file under the user config directory.

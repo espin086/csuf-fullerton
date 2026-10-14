@@ -23,7 +23,7 @@ Granger and block-exogeneity Wald tests SHALL use lag augmentation by `d_max` (T
 with `d_max` from the integration stage.
 
 #### Scenario: Size under unit roots
-- **WHEN** 300 samples of 200 observations are simulated from an I(1) system with no feedback
+- **WHEN** 300 samples of 300 observations are simulated from an I(1) system with no feedback
   from domestic to foreign variables
 - **THEN** the lag-augmented block Wald test SHALL reject at the 5% level in between 2% and 10%
   of samples

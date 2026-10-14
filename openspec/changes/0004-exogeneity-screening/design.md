@@ -27,7 +27,9 @@ this table separately and never sums them into one number that hides which claim
   and cointegration properties.
 - **GVAR practice for weak exogeneity.** Pesaran, Schuermann and Weiner (2004) and the GVAR
   papers that follow test whether the foreign ("star") variables load on the domestic error
-  correction terms. The screen runs the same F-test when Johansen finds rank >= 1.
+  correction terms. The screen runs the same F-test when Johansen finds `0 < rank < k`. Cointegration among
+  foreign variables alone is allowed: the test conditions on the foreign-only error-correction
+  terms and asks whether the full-system terms (which involve domestic variables) add anything.
 - **Report orderings and alternatives as robustness.** Kilian and Lütkepohl (2017, ch. 8)
   and the monetary SVAR literature report results across orderings and variable sets. Recursive
   orderings inside a block are observationally equivalent (same likelihood), so the data cannot
@@ -93,7 +95,8 @@ ADF (constant and trend, lag by AIC) and KPSS (trend) per series. Order `d_i = 0
 rejects at 5% and KPSS does not; `d_i = 1` otherwise, flagged "conflict" when both reject or
 neither does. The differenced series gets the same check, so a series can be graded `d = 2`.
 `d_max = max d_i`, capped at 2. Johansen trace test (trend case matching the theory file) for
-the rank.
+the rank, with the Reinsel and Ahn (1992) small-sample scaling `(T - k p) / T`. Seasonal
+dummies are partialled out first because the Johansen routine has no seasonal option.
 
 **Stage 2. Lag order.** AIC, BIC and HQ on the unrestricted VAR in levels with the
 deterministic terms, `p` from 1 to `max_lags`. The screen uses BIC's choice by default (the
@@ -112,13 +115,13 @@ most conservative with many parameters per equation) and reports all three; `--l
 | Test | Statistic | Null | Reading |
 |---|---|---|---|
 | Block exogeneity LR (Sims correction) | `(T - c)(ln|S_r| - ln|S_u|)`, df `k_F k_D p` | `D` does not Granger-cause `F` | the 0002 test |
-| Block exogeneity, lag-augmented Wald | TY Wald, df `k_F k_D p` | same, robust to unit roots | **primary verdict** |
+| Block exogeneity, lag-augmented Wald | TY Wald, df `k_F k_D p`, residual-bootstrap p under the null (Hacker and Hatemi-J 2006) | same, robust to unit roots | **primary verdict** |
 | Block instantaneous causality | `T(ln|S_FF| + ln|S_DD| - ln|S|)`, df `k_F k_D` | residual blocks uncorrelated | rejection is normal; recursive identification orders it |
 | Weak exogeneity (when rank >= 1) | F-test of ECT loadings in `Δx` equations | `F` does not adjust to domestic disequilibrium | rejection breaks long-run exogeneity |
-| Pseudo out-of-sample, h = 1 | Clark-West MSPE-adjusted, domestic equations | restricted forecasts no worse | big losses mean the restriction throws away information |
+| Pseudo out-of-sample, h = 1 | Clark-West MSPE-adjusted, foreign equations, expanding window over the last 25% | domestic lags do not improve foreign forecasts | enters the verdict only when `d_max = 0`; Clark-West asymptotics assume stationarity |
 | Information criteria | AIC, BIC, HQ of the restricted system | | fewer parameters, comparable likelihood across candidates on the same sample |
 | Residual checks | adjusted portmanteau (h = 12), max companion root | | flags, not grades |
-| Theory direction | sign and size of each foreign-to-domestic direction measure | | advisory |
+| Theory direction | DirectLiNGAM causal order of the residuals (Shimizu et al. 2011): share of foreign-domestic pairs ordered foreign first, with a bootstrap 5th percentile | | advisory |
 
 All candidates use the same sample (the longest common one after lags), so likelihoods and
 criteria are comparable.
@@ -133,10 +136,13 @@ Theory grade:
   says it should not).
 - **X** inadmissible: an `endogenous` variable in the foreign block. Reported, never ranked.
 
-Statistical verdict, primary test = the lag-augmented Wald, Holm-adjusted across candidates at
-`alpha` (default 0.05):
+Statistical verdict, primary test = the bootstrap lag-augmented Wald, Holm-adjusted across
+candidates at `alpha` (default 0.05). The bootstrap uses at least `4 m / alpha` draws for a
+family of `m` candidates, because the smallest attainable p-value `1 / (B + 1)` must sit below
+`alpha / m` for Holm to be able to reject at all:
 - **supported** adjusted p >= alpha, and weak exogeneity not rejected (or not applicable).
-- **mixed** adjusted p >= alpha but weak exogeneity rejected, or unadjusted p < alpha only.
+- **mixed** adjusted p >= alpha but weak exogeneity rejected (Holm within the block), or
+  unadjusted p < alpha only, or (stationary data only) Clark-West rejects.
 - **rejected** adjusted p < alpha.
 
 Rank: theory grade (A before B), then verdict (supported, mixed, rejected), then BIC, then the
@@ -165,10 +171,12 @@ src/csuf_fullerton/core/svar/
   theory.py       TheorySpec parsing (from a dict) and candidate enumeration
   screening.py    stages 1 to 6, ScreenResult
   report.py       ScreenResult and SvarResult to Markdown text (pure string building)
-src/csuf_fullerton/adapters/
-  fred.py         FRED API (key) or fredgraph CSV (no key)
-  imf.py          IMF SDMX 3.0 CSV
+src/csuf_fullerton/core/recipe.py    data recipe parsing, transforms, monthly alignment
+src/csuf_fullerton/core/svar/model.py one SVAR run (estimate, tests, bands, FEVD)
+src/csuf_fullerton/data/
   credentials.py  FRED key lookup: env, keyring, 0600 file
+  adapters/fred.py  FRED API (key) or fredgraph CSV (no key)
+  adapters/imf.py   IMF SDMX 3.0 CSV
 src/csuf_fullerton/cli/
   main.py         Typer app: init, fetch, screen, svar
   plots.py        matplotlib figures
@@ -183,7 +191,9 @@ which it used. The key is never written to `run.json`, logs or output files.
 
 1. Simulated block-exogenous DGP: the true split is graded supported and ranked first; a split
    that moves a truly domestic variable into the foreign block is rejected.
-2. Simulated I(1) DGP with no feedback: lag-augmented Wald has size near 5% over 300 draws.
+2. Simulated I(1) DGP with no feedback: lag-augmented Wald has size between 2% and 10% over
+   300 draws of 300 observations. Measured during the build at T = 150: plain Wald 37%, LR
+   34%, asymptotic lag-augmented Wald 10.7%, bootstrap lag-augmented Wald 6%.
 3. Theory enumeration: counts, ordering, and the X grade for endogenous variables.
 4. Hyvärinen-Smith measure recovers the direction on a simulated non-Gaussian pair.
 5. Clark-West equals the textbook formula on a fixed example.
