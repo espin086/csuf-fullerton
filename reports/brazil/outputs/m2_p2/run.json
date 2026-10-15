@@ -1,0 +1,99 @@
+{
+  "command": "tvsvar",
+  "model": "m2",
+  "data": "data/brazil.csv",
+  "data_sha256": "d3c48d85243448b0b8c5b59c42c20d9283342615ce32036ed18d156c1661df89",
+  "trade": "data/brazil_trade.csv",
+  "trade_sha256": "1cd5fb83f29b1a4902919f37774fa4ae14e8dc5bf2ea16bf07f8ee8dd23a9d34",
+  "weight_window": 3,
+  "weights_lag": 1,
+  "settings": {
+    "foreign": [
+      "commodity",
+      "us_act",
+      "cn_act",
+      "ffr"
+    ],
+    "domestic": [
+      "br_ip",
+      "br_cpi",
+      "br_selic",
+      "br_er"
+    ],
+    "partners": [
+      [
+        "us",
+        [
+          "us_act"
+        ]
+      ],
+      [
+        "cn",
+        [
+          "cn_act"
+        ]
+      ]
+    ],
+    "lags": 2,
+    "max_lags": 6,
+    "trend": false,
+    "seasonal": true,
+    "horizon": 24,
+    "draws": 500,
+    "level": 0.68,
+    "frozen_years": [],
+    "variant": "interacted",
+    "band_method": "hall",
+    "lr_draws": 199,
+    "break_date": null,
+    "break_draws": 199,
+    "bandwidth_exp": 0.7,
+    "kernel_step": 1,
+    "headlines": [
+      [
+        "br_ip",
+        "cn_act"
+      ],
+      [
+        "br_ip",
+        "us_act"
+      ],
+      [
+        "br_cpi",
+        "cn_act"
+      ],
+      [
+        "br_er",
+        "cn_act"
+      ]
+    ],
+    "m3_vars": [],
+    "m3_foreign": 0,
+    "m3_diff12": [],
+    "seed": 20261014,
+    "tvp": {
+      "p": 2,
+      "draws": 10000,
+      "burn": 2000,
+      "thin": 4,
+      "training": 0,
+      "k_q": 0.01,
+      "k_s": 0.1,
+      "k_w": 0.01,
+      "tau": 40,
+      "seed": 20261014
+    }
+  },
+  "start": "1999-07",
+  "end": "2019-12",
+  "p": 2,
+  "bandwidth": 47.16877255146081,
+  "weight_corr": {
+    "br_ip|cn_act": 0.4412989474055987,
+    "br_ip|us_act": -0.8788885467204794,
+    "br_cpi|cn_act": -0.9877809319425572,
+    "br_er|cn_act": -0.41179555484638447
+  },
+  "package_version": "0.1.0",
+  "created": "2026-10-14T23:50:48+00:00"
+}

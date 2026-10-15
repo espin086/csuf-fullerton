@@ -1,0 +1,31 @@
+id = "m1-sim-coverage"
+model = "m1"
+kind = "simulation"
+suite = "full"
+function = "m1_sim_coverage"
+source = "Frozen-weight IRF coverage, M1 DGP"
+seed = 200
+qualitative = false
+notes = "Nominal 90% Hall bands. 2026-10-14 run: 0.895, 0.880 and 0.857. A 40-replication pilot with 99 draws gave 0.82, 0.82 and 0.76, which is why the fast case is looser."
+
+[settings]
+n = 400
+reps = 200
+draws = 199
+horizon = 12
+level = 0.9
+
+[[metric]]
+name = "coverage_first"
+op = ">="
+target = 0.85
+
+[[metric]]
+name = "coverage_last"
+op = ">="
+target = 0.85
+
+[[metric]]
+name = "coverage_diff"
+op = ">="
+target = 0.85

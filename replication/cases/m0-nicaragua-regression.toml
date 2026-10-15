@@ -1,0 +1,31 @@
+id = "m0-nicaragua-regression"
+model = "m0"
+kind = "regression"
+suite = "fast"
+function = "m0_nicaragua_regression"
+source = "Committed Nicaragua thesis-split SVAR (change 0004 report, p = 1)"
+seed = 20261014
+qualitative = false
+
+[[data]]
+name = "data"
+path = "data/nicaragua.csv"
+sha256 = "0d8c196a726385047cd54f2212f4b23203dae368c53ada861b301ef99da70bf2"
+
+[[data]]
+name = "irf"
+path = "reports/nicaragua/outputs/svar_thesis_p1/irf.csv"
+sha256 = "f5d4d0e688b81e6a9871ef277a799a8e04db8ab43e5d77aa51ac19f379d6406b"
+
+[settings]
+foreign = ["ffr", "us_ip", "commodity"]
+domestic = ["ni_ip", "ni_cpi", "ni_m2", "ni_er"]
+lags = 1
+horizon = 24
+dmax = 2
+draws = 2
+
+[[metric]]
+name = "max_abs_diff"
+op = "<="
+target = 1e-08

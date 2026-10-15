@@ -1,0 +1,33 @@
+id = "m3-primiceri-2005"
+model = "m3"
+kind = "published"
+suite = "full"
+function = "m3_primiceri"
+source = "Primiceri (2005), Figure 1: interest-rate volatility peaks around 1981"
+seed = 1
+qualitative = true
+
+[[data]]
+name = "data"
+path = "replication/fixtures/primiceri_us.csv"
+sha256 = "a40ac416229f12b05f474dd9afe59cb8830ca22face71999f9df5f7349f93ad6"
+
+[settings]
+columns = ["inflation", "unemployment", "tbill"]
+rate = "tbill"
+base_date = "1995Q1"
+p = 2
+training = 40
+draws = 10000
+burn = 2000
+thin = 4
+
+[[metric]]
+name = "rate_vol_peak_year"
+op = "between"
+target = [1979.0, 1983.75]
+
+[[metric]]
+name = "rate_vol_peak_over_base"
+op = ">="
+target = 3.0

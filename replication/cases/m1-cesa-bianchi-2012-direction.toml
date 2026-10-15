@@ -1,0 +1,50 @@
+id = "m1-cesa-bianchi-2012-direction"
+model = "m1"
+kind = "published"
+suite = "fast"
+function = "m1_direction"
+source = "Cesa-Bianchi, Pesaran, Rebucci and Xu (2012), IZA DP 5889, fixed 1995 vs 2009 weights"
+seed = 0
+qualitative = true
+notes = "Direction only: their model is a multi-country GVAR on quarterly GDP, ours one country, monthly, p = 4 (BIC in the exogeneity screen). With p = 2 the China change is positive over months 0-12 but turns slightly negative over months 12-24; see the Brazil report's sensitivity table."
+
+[[data]]
+name = "data"
+path = "data/brazil.csv"
+sha256 = "d3c48d85243448b0b8c5b59c42c20d9283342615ce32036ed18d156c1661df89"
+
+[[data]]
+name = "trade"
+path = "data/brazil_trade.csv"
+sha256 = "1cd5fb83f29b1a4902919f37774fa4ae14e8dc5bf2ea16bf07f8ee8dd23a9d34"
+
+[settings]
+foreign = ["commodity", "us_act", "cn_act", "ffr"]
+domestic = ["br_ip", "br_cpi", "br_selic", "br_er"]
+partners = [["us", ["us_act"]], ["cn", ["cn_act"]]]
+seasonal = true
+trend = true
+window = 3
+weights_lag = 1
+lags = 4
+start = "1999-07"
+end = "2009-12"
+year_a = 1995
+year_b = 2009
+h0 = 0
+h1 = 24
+pairs = { change_cn = ["br_ip", "cn_act"], change_us = ["br_ip", "us_act"] }
+
+[[metric]]
+name = "change_cn"
+op = ">="
+target = 0.0
+golden = 0.5559612833766616
+golden_tol = 1e-06
+
+[[metric]]
+name = "change_us"
+op = "<="
+target = 0.0
+golden = -0.10150933250440236
+golden_tol = 1e-06

@@ -1,0 +1,10 @@
+{
+  "retrieved": "2026-10-14T23:22:40+00:00",
+  "source": "IMF IMTS, goods exports FOB plus imports CIF, U.S. dollars",
+  "country": "BRA",
+  "partners": {
+    "us": "USA",
+    "cn": "CHN"
+  },
+  "world": "G001"
+}

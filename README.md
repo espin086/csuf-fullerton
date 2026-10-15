@@ -7,7 +7,10 @@ Built for ECON 505 research papers and M.A. VAR theses at CSUF. Standard and rec
 easy in EViews or Stata; block-exogenous SVARs (Cushman and Zha 1997) are not, and neither tool
 helps you justify the split between foreign and domestic variables. This package does both.
 
-First application: [Nicaragua report](reports/nicaragua/report.md).
+Applications: [Nicaragua report](reports/nicaragua/report.md) (block-exogenous SVAR) and
+[Brazil report](reports/brazil/report.md) (time-varying SVAR as China replaced the United States
+as Brazil's largest trading partner). Start with [QUICKSTART.md](QUICKSTART.md) to rebuild both
+from code.
 
 ## What it does
 
@@ -17,6 +20,9 @@ First application: [Nicaragua report](reports/nicaragua/report.md).
 | `csuf-fullerton fetch` | Downloads FRED and IMF series from a recipe into one aligned CSV |
 | `csuf-fullerton screen` | Which variables are exogenous to the domestic economy, judged by theory and by the data, across every candidate split |
 | `csuf-fullerton svar` | Impulse responses, variance decompositions and the block-exogeneity tests for the split you choose |
+| `csuf-fullerton trade-weights` | Annual exports plus imports by partner (IMF IMTS) for trade weights |
+| `csuf-fullerton tvsvar` | Time-varying SVARs: stability tests (M0), trade-weighted SVAR (M1), kernel SVAR (M2), TVP-VAR with stochastic volatility (M3) |
+| `csuf-fullerton replicate` | The evaluation suite: every estimator against simulated known answers, reference software and published results |
 
 ### The screen, in one paragraph
 
@@ -83,17 +89,22 @@ Copy `examples/nicaragua/`, then edit:
 
 ```
 src/csuf_fullerton/core/svar/  estimator, tests, screening, report text (pure, no I/O)
+src/csuf_fullerton/core/tvsvar/  time-varying models M0 to M3, trade weights, simulations
+src/csuf_fullerton/core/replication/  replication cases and their functions
 src/csuf_fullerton/core/recipe.py  data recipe parsing and alignment
 src/csuf_fullerton/data/       FRED and IMF drivers, credential storage
 src/csuf_fullerton/cli/        Typer commands and matplotlib figures
-examples/nicaragua/            data recipe and theory file
-reports/nicaragua/             report and committed outputs
-openspec/changes/              0002 (estimator) and 0004 (screening) specs
+examples/{nicaragua,brazil}/   data recipes and theory files
+reports/{nicaragua,brazil}/    reports and committed outputs
+replication/                   cases, pinned fixtures and the scripts that make them
+scripts/reproduce_*.sh         rebuild a report's outputs from code
+openspec/changes/              0002 (estimator), 0004 (screening), 0005 (time-varying) specs
 ```
 
 ## Contributing
 
 Spec-driven (OpenSpec): issue, planning change, then implementation. `make check` runs ruff,
-mypy, the offline test suite and `openspec validate`. See `CONTRIBUTING.md` and
+mypy, the offline test suite, `openspec validate` and the fast replication suite; `make secrets`
+runs gitleaks over history and the working tree. See `CONTRIBUTING.md` and
 `docs/AGENT-HARNESS.md`. The repository started from a Python CLI template; release and hosting
 docs are in `docs/RELEASING.md` and `docs/HOSTING-PROFILES.md`.

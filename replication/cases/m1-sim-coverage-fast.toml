@@ -1,0 +1,30 @@
+id = "m1-sim-coverage-fast"
+model = "m1"
+kind = "simulation"
+suite = "fast"
+function = "m1_sim_coverage"
+source = "Frozen-weight IRF coverage, M1 DGP"
+seed = 100
+qualitative = false
+
+[settings]
+n = 400
+reps = 10
+draws = 99
+horizon = 12
+level = 0.9
+
+[[metric]]
+name = "coverage_first"
+op = ">="
+target = 0.65
+
+[[metric]]
+name = "coverage_last"
+op = ">="
+target = 0.65
+
+[[metric]]
+name = "coverage_diff"
+op = ">="
+target = 0.6

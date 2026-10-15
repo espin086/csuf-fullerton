@@ -1,0 +1,23 @@
+id = "m0-parity-statsmodels"
+model = "m0"
+kind = "parity"
+suite = "fast"
+function = "m0_parity_statsmodels"
+source = "statsmodels.tsa.api.VAR, constant only"
+seed = 0
+qualitative = false
+
+[[data]]
+name = "data"
+path = "data/brazil.csv"
+sha256 = "d3c48d85243448b0b8c5b59c42c20d9283342615ce32036ed18d156c1661df89"
+
+[settings]
+lags = 4
+start = "1999-07"
+end = "2019-12"
+
+[[metric]]
+name = "max_abs_diff"
+op = "<="
+target = 1e-08

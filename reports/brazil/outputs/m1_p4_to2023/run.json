@@ -1,0 +1,140 @@
+{
+  "command": "tvsvar",
+  "model": "m1",
+  "data": "data/brazil.csv",
+  "data_sha256": "d3c48d85243448b0b8c5b59c42c20d9283342615ce32036ed18d156c1661df89",
+  "trade": "data/brazil_trade.csv",
+  "trade_sha256": "1cd5fb83f29b1a4902919f37774fa4ae14e8dc5bf2ea16bf07f8ee8dd23a9d34",
+  "weight_window": 3,
+  "weights_lag": 1,
+  "settings": {
+    "foreign": [
+      "commodity",
+      "us_act",
+      "cn_act",
+      "ffr"
+    ],
+    "domestic": [
+      "br_ip",
+      "br_cpi",
+      "br_selic",
+      "br_er"
+    ],
+    "partners": [
+      [
+        "us",
+        [
+          "us_act"
+        ]
+      ],
+      [
+        "cn",
+        [
+          "cn_act"
+        ]
+      ]
+    ],
+    "lags": 4,
+    "max_lags": 6,
+    "trend": true,
+    "seasonal": true,
+    "horizon": 24,
+    "draws": 1000,
+    "level": 0.68,
+    "frozen_years": [
+      2000,
+      2009,
+      2022
+    ],
+    "variant": "interacted",
+    "band_method": "hall",
+    "lr_draws": 199,
+    "break_date": null,
+    "break_draws": 199,
+    "bandwidth_exp": 0.5,
+    "kernel_step": 1,
+    "headlines": [
+      [
+        "br_ip",
+        "cn_act"
+      ],
+      [
+        "br_ip",
+        "us_act"
+      ],
+      [
+        "br_cpi",
+        "cn_act"
+      ],
+      [
+        "br_er",
+        "cn_act"
+      ]
+    ],
+    "m3_vars": [],
+    "m3_foreign": 0,
+    "m3_diff12": [],
+    "seed": 20261014,
+    "tvp": {
+      "p": 2,
+      "draws": 10000,
+      "burn": 2000,
+      "thin": 4,
+      "training": 0,
+      "k_q": 0.01,
+      "k_s": 0.1,
+      "k_w": 0.01,
+      "tau": 40,
+      "seed": 20261014
+    }
+  },
+  "start": "1999-07",
+  "end": "2023-11",
+  "p": 4,
+  "sample": [
+    "1999-11",
+    "2023-11"
+  ],
+  "frozen_weights": {
+    "2000": [
+      0.21840569944385957,
+      0.017715237705682018
+    ],
+    "2009": [
+      0.15811363412249835,
+      0.08480733663564048
+    ],
+    "2022": [
+      0.1396508646217565,
+      0.26271749499098934
+    ]
+  },
+  "tests": {
+    "LR: weights do not change transmission": {
+      "stat": 78.50552242535389,
+      "df": 40,
+      "p": 0.0002640355534213098,
+      "bootstrap_p": 0.005
+    },
+    "LR: GVAR star loading is enough": {
+      "stat": 112.58727068003589,
+      "df": 60,
+      "p": 4.661335676285111e-05,
+      "bootstrap_p": 0.005
+    },
+    "LR: weight levels do not enter": {
+      "stat": 48.238141825484824,
+      "df": 8,
+      "p": 8.895996500590043e-08,
+      "bootstrap_p": null
+    },
+    "equal partner slopes Wald": {
+      "stat": 58.26195480184697,
+      "df": 20,
+      "p": 1.3184289148793741e-05,
+      "bootstrap_p": null
+    }
+  },
+  "package_version": "0.1.0",
+  "created": "2026-10-14T23:50:45+00:00"
+}

@@ -1,0 +1,35 @@
+id = "m1-parity-constant"
+model = "m1"
+kind = "parity"
+suite = "fast"
+function = "m1_parity_constant"
+source = "Change 0002 block-exogenous estimator"
+seed = 0
+qualitative = false
+
+[[data]]
+name = "data"
+path = "data/brazil.csv"
+sha256 = "d3c48d85243448b0b8c5b59c42c20d9283342615ce32036ed18d156c1661df89"
+
+[[data]]
+name = "trade"
+path = "data/brazil_trade.csv"
+sha256 = "1cd5fb83f29b1a4902919f37774fa4ae14e8dc5bf2ea16bf07f8ee8dd23a9d34"
+
+[settings]
+foreign = ["commodity", "us_act", "cn_act", "ffr"]
+domestic = ["br_ip", "br_cpi", "br_selic", "br_er"]
+partners = [["us", ["us_act"]], ["cn", ["cn_act"]]]
+seasonal = true
+trend = true
+window = 3
+weights_lag = 1
+lags = 4
+start = "1999-07"
+end = "2019-12"
+
+[[metric]]
+name = "max_abs_diff"
+op = "<="
+target = 1e-10

@@ -1,0 +1,22 @@
+id = "m1-sim-lr-size"
+model = "m1"
+kind = "simulation"
+suite = "full"
+function = "m1_sim_lr_size"
+source = "Constant-vs-interacted LR size and power, M1 DGP"
+seed = 400
+qualitative = false
+
+[settings]
+n = 400
+reps = 500
+
+[[metric]]
+name = "size"
+op = "between"
+target = [0.03, 0.08]
+
+[[metric]]
+name = "power"
+op = ">="
+target = 0.9
