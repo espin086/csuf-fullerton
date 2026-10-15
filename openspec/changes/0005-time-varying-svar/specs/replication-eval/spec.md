@@ -20,8 +20,8 @@ band coverage and test size with the targets in the case file.
 
 #### Scenario: M1 band coverage
 - **WHEN** the full suite runs the M1 recovery case with 200 replications at T = 400
-- **THEN** 90% bootstrap bands SHALL cover the true frozen-year IRFs in at least 80% of
-  replications, and their difference in at least 75%
+- **THEN** 90% bootstrap bands SHALL cover the true frozen-year IRFs, and their difference,
+  in at least 85% of replications
 
 #### Scenario: LR test size
 - **WHEN** data are simulated with `G = 0`

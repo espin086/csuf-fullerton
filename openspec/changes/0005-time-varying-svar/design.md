@@ -274,10 +274,13 @@ amended to match where a requirement changed.
 5. **M1 inference.** Hall intervals are the default: percentile bands left point estimates
    outside their own band in the levels VAR. LR tests also get a bootstrap p-value that
    regenerates data from the restricted model along the observed weight path.
-6. **M1 coverage target.** 40 replications of the M1 DGP at T = 400 gave 90% Hall bands
-   covering 0.82 (first year), 0.82 (last year) and 0.76 (difference). Bootstrap IRF bands
-   under-cover in samples this size (Kilian 1998). The full-suite targets are 0.80, 0.80 and
-   0.75 rather than the 0.85 first planned.
+6. **Coverage results.** The full M1 case (200 replications, 199 draws, T = 400) covers the
+   true frozen-year IRFs with 90% Hall bands 0.895 (first year), 0.880 (last year) and 0.857
+   (difference), so the planned 0.85 target stands. A 40-replication pilot with 99 draws gave
+   0.82, 0.82 and 0.76, so the fast case uses looser targets. M3's 90% bands cover simulated
+   coefficient paths 0.83 of the time and log-variance paths 0.68: the volatility bands
+   under-cover (KSC mixture approximation, tight `k_W` prior). The M3 target is 0.65 for log
+   variances, recorded as a known weakness.
 7. **M0 rolling window** dropped: M2 gives the same picture with a defined bandwidth.
 8. **M2 bandwidth.** GKY's `T^0.5` leaves about 28 effective observations at the sample ends,
    fewer than the 49 regressors of an eight-variable, four-lag monthly equation with seasonal
